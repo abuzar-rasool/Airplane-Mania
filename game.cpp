@@ -210,34 +210,51 @@ void Game::spawnBirds()
 
 
 
+void Game::Check4Collision(){
+	for (Unit *i : birds){
+		for (Plane *j : planes)
+		{
+			if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
+			{
+				j->crashed();
+				birds.remove(i);
+				cout << "Thuk Gaya Jhaaz"<<endl;
+			}
+		}
+		for (Flare *k : flares)
+		{
+			if (abs(i->getMover().x - k->getMover().x) <= 50 && abs(i->getMover().y - k->getMover().y) <= 50)
+			{
+
+				birds.remove(i);
+				k->collisionhappen();
+				cout << "Bird Margai"<<endl;
+			}
+			if (k->getMover().y<0){
+				flares.remove(k);
+			}
+		}
+	}
+
+}
+
 // void Game::Check4Collision(){
-// 	for (Unit *i : birds){
-// 		for (Unit *j : planes)
-// 		{
-// 			if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
-// 			{
-// 				cout << "Thuk Gaya Jhaaz"<<endl;
+// 	SDL_Rect temp, temp1;
+// 	bool baby = 0;
+// 	for(auto parinda : birds){
+// 		temp = parinda->getMover();
+
+// 		for(auto jahaaz: planes){
+// 			temp1 = jahaaz->getMover();
+
+// 			if(temp1.x < temp.x && temp.x < temp1.x + temp1.w  && temp.y > temp1.y){
+// 				jahaaz->crashed();
+// 				cout << "Thuuk gaya" <<endl;
+// 				break;
 // 			}
 // 		}
 // 	}
 // }
-
-void Game::Check4Collision(){
-	SDL_Rect temp, temp1;
-	bool baby = 0;
-	for(auto parinda : birds){
-		temp = parinda->getMover();
-
-		for(auto jahaaz: planes){
-			temp1 = jahaaz->getMover();
-
-			if(temp1.x < temp.x && temp.x < temp1.x + temp1.w  && temp.y > temp1.y){
-				cout << "Thuuk gaya" <<endl;
-				break;
-			}
-		}
-	}
-}
 
 
 

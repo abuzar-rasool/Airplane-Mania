@@ -51,6 +51,16 @@ public:
             }
         }
     }
+    
+    void crashed(){
+        still_flying = false;
+        std::cout<<"The plane should change";
+        src[0] = {46, 686, 201, 128};
+        src[1] = {46, 686, 201, 128};
+        src[2] = {46, 686, 201, 128};
+        src[3] = {46, 686, 201, 128};
+    }
+
     void childDraw(SDL_Renderer *render)
     {
         animate();
@@ -73,6 +83,7 @@ public:
     Plane_flying(SDL_Texture *texture) : Plane(texture, 3)
     {
         SDL_Rect src[4];
+        
         src[0] = {46, 882, 205, 131};
         src[1] = {42, 1070, 205, 131};
         src[2] = {46, 882, 205, 131};
@@ -95,3 +106,4 @@ public:
         Plane::setPlaneSource(src);
     };
 };
+

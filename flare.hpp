@@ -4,7 +4,7 @@ class Flare : public FlyingObject
 {
 private:
     SDL_Rect src[10];
-
+    bool collide = false;
 public:
     Flare(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
     {
@@ -27,7 +27,7 @@ public:
     void animate()
     {
         //move up to the blast point
-        if(Unit::getMover().y>100){
+        if(collide==false){
             Unit::mover.y-=40;
             Unit::mover.w+=1;
             Unit::mover.h+=1;
@@ -38,6 +38,9 @@ public:
                 frame++;
         }
 
+    }
+    void collisionhappen(){
+        collide=true;
     }
     void childDraw(SDL_Renderer *render)
     {
@@ -53,4 +56,5 @@ public:
            return true;
        }
     };
+
 };

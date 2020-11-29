@@ -45,3 +45,4 @@ void Unit::rotation(SDL_Renderer *render){
         angle = 180;
     }
 };
+
