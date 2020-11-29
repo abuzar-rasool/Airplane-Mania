@@ -25,6 +25,7 @@ class Game{
 
     int no_of_birds = 1;
     int no_of_planes = 1;
+    int no_of_total_birds = 0;
 
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
@@ -58,5 +59,6 @@ public:
     void spawnBirds();
     void spawnPlanes();
     void updateFlare();
+    void Check4Collision();
 };
 

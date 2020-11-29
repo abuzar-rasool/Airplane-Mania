@@ -79,6 +79,7 @@ public:
         src[3] = {42, 1070, 205, 131};
         Unit::mover.h = 45;
         Unit::mover.w = 70;
+        
         Plane::setPlaneSource(src);
     };
 };

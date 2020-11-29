@@ -191,7 +191,6 @@ void Game::updateFlare(){
 
 void Game::spawnBirds()
 {
-
 	for (int i = 0; i < no_of_birds; i++)
 	{
 		//Randomly spawn Bird1, Bird2 and Bir
@@ -209,9 +208,17 @@ void Game::spawnBirds()
 	}
 }
 
+
+void Game::Check4Collision(){
+	for(int n=0; n<no_of_total_birds;n++){
+		
+	}
+}
+
+
+
 void Game::spawnPlanes()
 {
-
 	for (int i = 0; i < no_of_planes; i++)
 	{
 		planes.push_back(new Plane_flying(assets));
@@ -267,6 +274,8 @@ void Game::run()
 					//SDL_Rect currentPosition = {xMouse, yMouse, 50, 50};
 					// pigeons.push_back(new Pigeon(assets, currentPosition, false));
 					spawnBirds();
+					no_of_total_birds+=1;
+					Check4Collision();
 				}
 				else if(yMouse < 400){
 					spawnPlanes();

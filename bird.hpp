@@ -92,6 +92,10 @@ public:
         src[1] = {157, 366, 88, 41};
         src[2] = {41, 481, 87, 64};
         src[3] = {155, 481, 90, 42};
+
+        Unit::mover.w=60;
+         Unit::mover.h=32;
+
         Bird::setBirdSource(src);
     };
 };
