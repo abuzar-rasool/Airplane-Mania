@@ -13,6 +13,7 @@
 #include "nest.hpp"
 #include "bird.hpp"
 #include "flare.hpp"
+#include "plane.hpp"
 
 using namespace std;
 
@@ -23,6 +24,7 @@ class Game{
 
 
     int no_of_birds = 1;
+    int no_of_planes = 1;
 
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
@@ -40,6 +42,7 @@ class Game{
     list<Unit*> eggs;
     list<Nest*> nests;   
     list<Unit*> birds;
+    list<Unit*> planes;
     list<Flare*> flares;  
 
 
@@ -53,6 +56,7 @@ public:
     void updatePigeons();
     void drawAllObjects();
     void spawnBirds();
+    void spawnPlanes();
     void updateFlare();
 };
 

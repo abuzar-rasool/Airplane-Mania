@@ -209,6 +209,15 @@ void Game::spawnBirds()
 	}
 }
 
+void Game::spawnPlanes()
+{
+
+	for (int i = 0; i < no_of_planes; i++)
+	{
+		planes.push_back(new Plane_flying(assets));
+	}
+}
+
 void Game::drawAllObjects()
 {
 	for (Unit *i : birds)
@@ -216,6 +225,10 @@ void Game::drawAllObjects()
 		i->childDraw(gRenderer);
 	}
 	for (Unit *i : flares)
+	{
+		i->childDraw(gRenderer);
+	}
+	for (Unit *i : planes)
 	{
 		i->childDraw(gRenderer);
 	}
@@ -248,12 +261,15 @@ void Game::run()
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 
-				if (yMouse < 400)
+				if (yMouse < 400 && xMouse > 400)
 				{
 					// Create a new Pigeon
 					//SDL_Rect currentPosition = {xMouse, yMouse, 50, 50};
 					// pigeons.push_back(new Pigeon(assets, currentPosition, false));
 					spawnBirds();
+				}
+				else if(yMouse < 400){
+					spawnPlanes();
 				}
 				else
 				{

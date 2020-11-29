@@ -1,6 +1,5 @@
 #include "game.hpp"
 //First change by jawwad
-//Git samajhgaya
 int main(int argc, char *argv[]){
     Game game;
     srand(time(NULL));
