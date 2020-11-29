@@ -209,9 +209,33 @@ void Game::spawnBirds()
 }
 
 
+
+// void Game::Check4Collision(){
+// 	for (Unit *i : birds){
+// 		for (Unit *j : planes)
+// 		{
+// 			if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
+// 			{
+// 				cout << "Thuk Gaya Jhaaz"<<endl;
+// 			}
+// 		}
+// 	}
+// }
+
 void Game::Check4Collision(){
-	for(int n=0; n<no_of_total_birds;n++){
-		
+	SDL_Rect temp, temp1;
+	bool baby = 0;
+	for(auto parinda : birds){
+		temp = parinda->getMover();
+
+		for(auto jahaaz: planes){
+			temp1 = jahaaz->getMover();
+
+			if(temp1.x < temp.x && temp.x < temp1.x + temp1.w  && temp.y > temp1.y){
+				cout << "Thuuk gaya" <<endl;
+				break;
+			}
+		}
 	}
 }
 
@@ -227,6 +251,7 @@ void Game::spawnPlanes()
 
 void Game::drawAllObjects()
 {
+	Check4Collision();
 	for (Unit *i : birds)
 	{
 		i->childDraw(gRenderer);
@@ -275,7 +300,7 @@ void Game::run()
 					// pigeons.push_back(new Pigeon(assets, currentPosition, false));
 					spawnBirds();
 					no_of_total_birds+=1;
-					Check4Collision();
+					//Check4Collision();
 				}
 				else if(yMouse < 400){
 					spawnPlanes();
