@@ -50,6 +50,10 @@ public:
                 Unit::mover.x -= planespeed;
             }
         }
+
+        if (still_flying == false){
+            Unit::mover.y += planespeed;
+        }
     }
     
     void crashed(){

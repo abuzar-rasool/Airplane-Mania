@@ -6,7 +6,7 @@ class FlyingObject : public Unit
 protected:
     bool flip;
     int frame = 0;
-    bool still_flying;
+    bool still_flying = true;
     bool randomBool()
     {
         return rand() > (RAND_MAX / 2);

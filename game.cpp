@@ -214,7 +214,7 @@ void Game::Check4Collision(){
 	for (Unit *i : birds){
 		for (Plane *j : planes)
 		{
-			if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
+			if (abs(i->getMover().x - j->getMover().x) <= j->getMover().w && abs(i->getMover().y - j->getMover().y) <= j->getMover().h)
 			{
 				j->crashed();
 				birds.remove(i);
@@ -223,7 +223,7 @@ void Game::Check4Collision(){
 		}
 		for (Flare *k : flares)
 		{
-			if (abs(i->getMover().x - k->getMover().x) <= 50 && abs(i->getMover().y - k->getMover().y) <= 50)
+			if (abs(i->getMover().x - k->getMover().x) <= i->getMover().w && abs(i->getMover().y - k->getMover().y) <= i->getMover().h)
 			{
 
 				birds.remove(i);
