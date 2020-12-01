@@ -3,10 +3,19 @@ class Plane : public FlyingObject
 {
 private:
     SDL_Rect src[4];
-    int planespeed = 5;
-
+    int planespeed = 5;    
 public:
-    Plane(SDL_Texture *texture) : FlyingObject(texture){};
+    Plane(SDL_Texture *texture) : FlyingObject(texture){
+        SDL_Rect src[4];        
+        src[0] = {46, 882, 205, 131};
+        src[1] = {42, 1070, 205, 131};
+        src[2] = {46, 882, 205, 131};
+        src[3] = {42, 1070, 205, 131};
+        Unit::mover.h = 45;
+        Unit::mover.w = 70;
+        Plane::setPlaneSource(src);
+        planespeed=3;
+    };
     Plane(SDL_Texture *texture, int s) : FlyingObject(texture), planespeed(s){};
     void animate()
     {
@@ -52,7 +61,7 @@ public:
         }
 
         if (still_flying == false){
-            Unit::mover.y += planespeed;
+            Unit::mover.y += planespeed+5;
         }
     }
     
@@ -68,10 +77,18 @@ public:
     void childDraw(SDL_Renderer *render)
     {
         animate();
-        Unit::draw(render, FlyingObject::flip);
+        if(!still_flying){
+            Unit::incline(render,10,FlyingObject::flip);
+        }else{
+            Unit::draw(render, FlyingObject::flip);    
+        }
+        
     };
     bool isAlive()
     {
+        if(Unit::mover.y>480){
+         return false;   
+        } 
         return true;
     };
     void setPlaneSource(SDL_Rect s[4])
@@ -81,33 +98,16 @@ public:
     }
 };
 
-class Plane_flying : public Plane
-{
-public:
-    Plane_flying(SDL_Texture *texture) : Plane(texture, 3)
-    {
-        SDL_Rect src[4];
-        
-        src[0] = {46, 882, 205, 131};
-        src[1] = {42, 1070, 205, 131};
-        src[2] = {46, 882, 205, 131};
-        src[3] = {42, 1070, 205, 131};
-        Unit::mover.h = 45;
-        Unit::mover.w = 70;
-        
-        Plane::setPlaneSource(src);
-    };
-};
 
-class Plane_crashed : public Plane
-{
+// class Plane_crashed : public Plane
+// {
 
-public:
-    Plane_crashed(SDL_Texture *texture) : Plane(texture, 4)
-    {
-        SDL_Rect src[1];
-        src[0] = {41, 157, 87, 85};
-        Plane::setPlaneSource(src);
-    };
-};
+// public:
+//     Plane_crashed(SDL_Texture *texture) : Plane(texture, 4)
+//     {
+//         SDL_Rect src[1];
+//         src[0] = {41, 157, 87, 85};
+//         Plane::setPlaneSource(src);
+//     };
+// };
 

@@ -27,6 +27,20 @@ void Unit::wobbledraw(SDL_Renderer *render)
     }
 };
 
+void Unit::incline(SDL_Renderer *render, int a,bool flip)
+{
+    if (flip)
+    {
+        SDL_RenderCopyEx(render, assets, &src, &mover, -a, NULL, SDL_FLIP_HORIZONTAL);
+    }
+    else
+    {
+        SDL_RenderCopyEx(render, assets, &src, &mover, a, NULL, SDL_FLIP_NONE);
+    }
+    
+}
+
+
 SDL_Rect Unit::getMover()
 {
     return mover;

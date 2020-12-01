@@ -24,6 +24,9 @@ public:
     //360 degrees animation draw
     void rotation(SDL_Renderer *render);
 
+    //inclined draw
+    void incline(SDL_Renderer *render, int a,bool flip);
+
 
     //virtual function of Unit
     //This is overrided by every other class it is parent of this calls extra function before draw
