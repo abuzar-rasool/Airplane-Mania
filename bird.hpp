@@ -10,6 +10,7 @@ public:
     Bird(SDL_Texture *texture, int s) : FlyingObject(texture), birdSpeed(s){};
     void animate()
     {
+        
         //Bird flying animation
         if (FlyingObject::frame == 3)
         {
@@ -24,10 +25,12 @@ public:
         if (!FlyingObject::flip)
         {
 
-            if (Unit::mover.x > 800)
+            if (Unit::mover.x > 750 && !flip)
             {
                 //If bird leave the screen reset it to its initial position
-                Unit::mover.x = 0;
+                flip=true;
+            }else if (Unit::mover.x < 50 && flip) {
+                flip=false;
             }
             else
             {
@@ -51,6 +54,8 @@ public:
             }
         }
     }
+
+
     void childDraw(SDL_Renderer *render)
     {
         animate();
@@ -58,6 +63,9 @@ public:
     };
     bool isAlive()
     {
+        if(Unit::mover.y>450){
+         return false;   
+        } 
         return true;
     };
     void setBirdSource(SDL_Rect s[4])
@@ -65,6 +73,7 @@ public:
         for (int i = 0; i < 4; i++)
             src[i] = s[i];
     }
+
 };
 
 class Bird1 : public Bird

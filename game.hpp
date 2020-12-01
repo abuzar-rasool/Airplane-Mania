@@ -14,6 +14,7 @@
 #include "bird.hpp"
 #include "flare.hpp"
 #include "plane.hpp"
+#include "blast.hpp"
 
 using namespace std;
 
@@ -45,7 +46,7 @@ class Game{
     list<Unit*> birds;
     list<Plane*> planes;
     list<Flare*> flares;  
-
+    list<Blast*> blasts;
 
 public:
     bool init();
@@ -60,5 +61,7 @@ public:
     void spawnPlanes();
     void updateFlare();
     void Check4Collision();
+    void updateBlasts();
+    void updatePlanes();
 };
 

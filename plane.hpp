@@ -86,7 +86,7 @@ public:
     };
     bool isAlive()
     {
-        if(Unit::mover.y>480){
+        if(Unit::mover.y>450){
          return false;   
         } 
         return true;

@@ -188,6 +188,25 @@ void Game::updateFlare(){
 	}
 }
 
+void Game::updateBlasts(){
+	for(Blast *i: blasts){
+		if(!i->isAlive()){
+			delete i;
+			blasts.remove(i);
+		}
+		
+	}
+}
+void Game::updatePlanes(){
+	for(Plane *i: planes){
+		if(!i->isAlive()){
+			delete i;
+			planes.remove(i);
+			blasts.push_back(new Blast(assets, i->getMover()));
+		}
+		
+	}
+}
 
 void Game::spawnBirds()
 {
@@ -277,13 +296,17 @@ void Game::drawAllObjects()
 	{
 		i->childDraw(gRenderer);
 	}
+
+	for (Blast *i : blasts)
+	{
+		
+		i->childDraw(gRenderer);
+	}
+
 	for (Plane *i : planes)
 	{
-		if(i->isAlive()){
-			i->childDraw(gRenderer);
-		}else{
-			planes.remove(i);
-		}
+		
+		i->childDraw(gRenderer);
 	}
 }
 
@@ -336,6 +359,8 @@ void Game::run()
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
 
 		updateFlare();
+		updatePlanes();
+		updateBlasts();
 		drawAllObjects();			  //draws all objects
 		SDL_RenderPresent(gRenderer); //displays the updated renderer
 		SDL_Delay(200);				  //causes sdl engine to delay for specified miliseconds

@@ -1,12 +1,12 @@
 #include "flying_object.hpp"
 
-class Flare : public FlyingObject
+class Blast : public FlyingObject
 {
 private:
     SDL_Rect src[10];
-    bool collide = false;
+
 public:
-    Flare(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
+    Blast(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
     {
         frame=0;
         SDL_Rect t_src[10] = {{881, 48, 38, 44},
@@ -26,22 +26,11 @@ public:
     };
     void animate()
     {
-        //move up to the blast point
-        if(collide==false){
-            Unit::mover.y-=40;
-            Unit::mover.w+=1;
-            Unit::mover.h+=1;
-        }else{
-            Unit::mover.w+=15;
-            Unit::mover.h+=15;
-            if(frame<9)
-                frame++;
-        }
-
-    }
+        Unit::mover.w+=5;
+        Unit::mover.h+=5;
+        if(frame<9)
+            frame++;
     
-    void collisionhappen(){
-        collide=true;
     }
     void childDraw(SDL_Renderer *render)
     {
