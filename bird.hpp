@@ -29,8 +29,6 @@ public:
             {
                 //If bird leave the screen reset it to its initial position
                 flip=true;
-            }else if (Unit::mover.x < 50 && flip) {
-                flip=false;
             }
             else
             {
@@ -42,10 +40,10 @@ public:
         else
         {
 
-            if (Unit::mover.x < 0)
+            if (Unit::mover.x < 10)
             {
                 //If bird leave the screen reset it to its initial position
-                Unit::mover.x = 800;
+                flip=false;
             }
             else
             {
