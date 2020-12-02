@@ -43,7 +43,7 @@ class Game{
     list<Unit*> pigeons;
     list<Unit*> eggs;
     list<Nest*> nests;   
-    list<Unit*> birds;
+    list<Bird*> birds;
     list<Plane*> planes;
     list<Flare*> flares;  
     list<Blast*> blasts;

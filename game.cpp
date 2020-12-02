@@ -200,9 +200,9 @@ void Game::updateBlasts(){
 void Game::updatePlanes(){
 	for(Plane *i: planes){
 		if(!i->isAlive()){
-			delete i;
 			planes.remove(i);
 			blasts.push_back(new Blast(assets, i->getMover()));
+			delete i;
 		}
 		
 	}
@@ -230,13 +230,13 @@ void Game::spawnBirds()
 
 
 void Game::Check4Collision(){
-	for (Unit *i : birds){
+	for (Bird *i : birds){
 		for (Plane *j : planes)
 		{
 			if (abs(i->getMover().x - j->getMover().x) <= j->getMover().w && abs(i->getMover().y - j->getMover().y) <= j->getMover().h)
 			{
 				j->crashed();
-				birds.remove(i);
+				i->crashed();
 				cout << "Thuk Gaya Jhaaz"<<endl;
 			}
 		}
@@ -245,7 +245,7 @@ void Game::Check4Collision(){
 			if (abs(i->getMover().x - k->getMover().x) <= i->getMover().w && abs(i->getMover().y - k->getMover().y) <= i->getMover().h)
 			{
 
-				birds.remove(i);
+				i->crashed();
 				k->collisionhappen();
 				cout << "Bird Margai"<<endl;
 			}

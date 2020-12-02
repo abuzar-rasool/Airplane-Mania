@@ -53,10 +53,19 @@ public:
         }
     }
 
+    void crashed(){
+        still_flying=false;
+        src[0]=src[3];
+        src[1]=src[3];
+        src[2]=src[3];
+        src[3]=src[3]; 
+    }
 
     void childDraw(SDL_Renderer *render)
     {
+         
         animate();
+
         Unit::draw(render, FlyingObject::flip);
     };
     bool isAlive()
