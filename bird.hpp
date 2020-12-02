@@ -51,17 +51,30 @@ public:
                 Unit::mover.x -= birdSpeed;
             }
         }
+
+        if(!still_flying){
+            Unit::mover.y += 30;
+        }
     }
 
+    void crashed(){
+        still_flying=false;
+        src[0]=src[3];
+        src[1]=src[3];
+        src[2]=src[3];
+        src[3]=src[3]; 
+    }
 
     void childDraw(SDL_Renderer *render)
     {
+         
         animate();
+
         Unit::draw(render, FlyingObject::flip);
     };
     bool isAlive()
     {
-        if(Unit::mover.y>450){
+        if(Unit::mover.y>580){
          return false;   
         } 
         return true;
@@ -70,6 +83,9 @@ public:
     {
         for (int i = 0; i < 4; i++)
             src[i] = s[i];
+    }
+    bool stillFlying(){
+        return still_flying;
     }
 
 };
