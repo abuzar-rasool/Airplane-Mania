@@ -22,6 +22,7 @@ class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
+    time_t start = time(0);
 
 
     int no_of_birds = 1;
@@ -63,6 +64,7 @@ public:
     void Check4Collision();
     void updateBlasts();
     void updatePlanes();
+    void timer();
     void updateBirds();
 };
 
