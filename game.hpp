@@ -63,5 +63,6 @@ public:
     void Check4Collision();
     void updateBlasts();
     void updatePlanes();
+    void updateBirds();
 };
 

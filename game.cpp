@@ -197,11 +197,29 @@ void Game::updateBlasts(){
 		
 	}
 }
+
+void Game::updateBirds(){
+	for(Bird *i: birds){
+		if(!i->isAlive()){
+			delete i;
+			birds.remove(i);
+		}
+		
+	}
+}
+
+
+
 void Game::updatePlanes(){
 	for(Plane *i: planes){
 		if(!i->isAlive()){
-			planes.remove(i);
+			try{
+
+			}catch(exception e){
+				printf("There was an exception");
+			}
 			blasts.push_back(new Blast(assets, i->getMover()));
+			planes.remove(i);
 			delete i;
 		}
 		
@@ -242,7 +260,7 @@ void Game::Check4Collision(){
 		}
 		for (Flare *k : flares)
 		{
-			if (abs(i->getMover().x - k->getMover().x) <= i->getMover().w && abs(i->getMover().y - k->getMover().y) <= i->getMover().h)
+			if (abs(i->getMover().x - k->getMover().x) <= i->getMover().w && abs(i->getMover().y - k->getMover().y) <= i->getMover().h && i->stillFlying())
 			{
 
 				i->crashed();
@@ -361,6 +379,7 @@ void Game::run()
 		updateFlare();
 		updatePlanes();
 		updateBlasts();
+		updateBirds();
 		drawAllObjects();			  //draws all objects
 		SDL_RenderPresent(gRenderer); //displays the updated renderer
 		SDL_Delay(200);				  //causes sdl engine to delay for specified miliseconds

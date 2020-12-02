@@ -51,6 +51,10 @@ public:
                 Unit::mover.x -= birdSpeed;
             }
         }
+
+        if(!still_flying){
+            Unit::mover.y += 30;
+        }
     }
 
     void crashed(){
@@ -70,7 +74,7 @@ public:
     };
     bool isAlive()
     {
-        if(Unit::mover.y>450){
+        if(Unit::mover.y>580){
          return false;   
         } 
         return true;
@@ -79,6 +83,9 @@ public:
     {
         for (int i = 0; i < 4; i++)
             src[i] = s[i];
+    }
+    bool stillFlying(){
+        return still_flying;
     }
 
 };
