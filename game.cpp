@@ -178,7 +178,6 @@ void Game::updatePigeons()
 	}
 }
 
-
 void Game::updateFlare(){
 	for(Flare *i: flares){
 		if(!i->isAlive()){
@@ -208,8 +207,6 @@ void Game::updateBirds(){
 		
 	}
 }
-
-
 
 void Game::updatePlanes(){
 	for(Plane *i: planes){
@@ -246,8 +243,6 @@ void Game::spawnBirds()
 	}
 }
 
-
-
 void Game::Check4Collision(){
 	for (Bird *i : birds){
 		for (Plane *j : planes)
@@ -267,6 +262,9 @@ void Game::Check4Collision(){
 				i->crashed();
 				k->collisionhappen();
 				cout << "Bird Margai"<<endl;
+			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+50 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+59 && i->stillFlying()){
+				i->scared();
+				k->collisionhappen();
 			}
 			if (k->getMover().y<0){
 				flares.remove(k);

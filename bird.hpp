@@ -4,6 +4,7 @@ class Bird : public FlyingObject
 private:
     SDL_Rect src[4];
     int birdSpeed = 5;
+    bool scare=false;
 
 public:
     Bird(SDL_Texture *texture) : FlyingObject(texture){};
@@ -21,7 +22,7 @@ public:
             frame++;
         }
         Unit::src = src[frame];
-
+        if(!scare){
         if (!FlyingObject::flip)
         {
 
@@ -52,6 +53,14 @@ public:
             }
         }
 
+        }else{
+            if(!flip){
+                Unit::mover.x += birdSpeed;
+            }else{
+                Unit::mover.x -= birdSpeed;
+            }
+        }
+
         if(!still_flying){
             Unit::mover.y += 30;
         }
@@ -65,6 +74,13 @@ public:
         src[3]=src[3]; 
     }
 
+    void scared()
+    {
+        birdSpeed+=10;
+        scare=true;
+        flip=!flip;
+    }
+
     void childDraw(SDL_Renderer *render)
     {
          
@@ -74,7 +90,7 @@ public:
     };
     bool isAlive()
     {
-        if(Unit::mover.y>580){
+        if(Unit::mover.y>580 or (Unit::mover.x<-10 || Unit::mover.x>810)){
          return false;   
         } 
         return true;
