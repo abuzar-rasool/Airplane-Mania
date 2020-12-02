@@ -152,6 +152,7 @@ void Game::updateEggs()
 		}
 	}
 }
+
 void Game::updatePigeons()
 {
 	//Iterate over the link list of pigeons and generated eggs with 2% probability
@@ -274,26 +275,6 @@ void Game::Check4Collision(){
 	}
 
 }
-
-// void Game::Check4Collision(){
-// 	SDL_Rect temp, temp1;
-// 	bool baby = 0;
-// 	for(auto parinda : birds){
-// 		temp = parinda->getMover();
-
-// 		for(auto jahaaz: planes){
-// 			temp1 = jahaaz->getMover();
-
-// 			if(temp1.x < temp.x && temp.x < temp1.x + temp1.w  && temp.y > temp1.y){
-// 				jahaaz->crashed();
-// 				cout << "Thuuk gaya" <<endl;
-// 				break;
-// 			}
-// 		}
-// 	}
-// }
-
-
 
 void Game::spawnPlanes()
 {
