@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "unit.hpp"
 #include <iostream>
+#include <time.h>
 
 bool Game::init()
 {
@@ -117,65 +118,64 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 
-void Game::updateEggs()
+// void Game::updateEggs()
+// {
+// 	//check the collision of eggs and nests here
+// 	//If an egg is dropped in a nest, produce a new baby pigeon
+// 	//if the egg is dropped on floor, remove it from list.
 
+// 	//The implemenation is done by iterating over eggs and nests in a
+// 	// nested fashion if, if the absoulte position if egg an the nest <=20
+// 	//then hatch the egg
+// 	for (Unit *i : eggs)
+// 	{
+// 		Egg *e = (Egg *)i;
+// 		if (e->dropped())
+// 		{
+// 			delete i;
+// 			eggs.remove(i);
+// 		}
+// 		else
+// 		{
+// 			for (Unit *j : nests)
+// 			{
+// 				Nest *n = (Nest *)i;
+// 				if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
+// 				{
+// 					SDL_Rect currentPosition = {i->getMover().x + 12, i->getMover().y + 12, 12, 16};
+// 					pigeons.push_back(new Pigeon(assets, currentPosition, true));
+// 					delete i;
+// 					eggs.remove(i);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 
-{
-	//check the collision of eggs and nests here
-	//If an egg is dropped in a nest, produce a new baby pigeon
-	//if the egg is dropped on floor, remove it from list.
-
-	//The implemenation is done by iterating over eggs and nests in a
-	// nested fashion if, if the absoulte position if egg an the nest <=20
-	//then hatch the egg
-	for (Unit *i : eggs)
-	{
-		Egg *e = (Egg *)i;
-		if (e->dropped())
-		{
-			delete i;
-			eggs.remove(i);
-		}
-		else
-		{
-			for (Unit *j : nests)
-			{
-				Nest *n = (Nest *)i;
-				if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
-				{
-					SDL_Rect currentPosition = {i->getMover().x + 12, i->getMover().y + 12, 12, 16};
-					pigeons.push_back(new Pigeon(assets, currentPosition, true));
-					delete i;
-					eggs.remove(i);
-				}
-			}
-		}
-	}
-}
-void Game::updatePigeons()
-{
-	//Iterate over the link list of pigeons and generated eggs with 2% probability
-	//Remove such pigeons from the list which have laid 4 eggs.
-	for (Unit *i : pigeons)
-	{
-		Pigeon *p = (Pigeon *)i;
-		if (p->isAlive())
-		{
-			//If pigeon is alive then call layegg that will layEgg at 2% probablity.
-			SDL_Rect tempmover = {p->getMover().x, p->getMover().y, 12, 16};
-			if (p->layEgg())
-			{
-				eggs.push_back(new Egg(assets, tempmover));
-			}
-		}
-		else
-		{
-			//If pigeon is not alive delete it from the memory and the array
-			delete p;
-			pigeons.remove(p);
-		}
-	}
-}
+// void Game::updatePigeons()
+// {
+// 	//Iterate over the link list of pigeons and generated eggs with 2% probability
+// 	//Remove such pigeons from the list which have laid 4 eggs.
+// 	for (Unit *i : pigeons)
+// 	{
+// 		Pigeon *p = (Pigeon *)i;
+// 		if (p->isAlive())
+// 		{
+// 			//If pigeon is alive then call layegg that will layEgg at 2% probablity.
+// 			SDL_Rect tempmover = {p->getMover().x, p->getMover().y, 12, 16};
+// 			if (p->layEgg())
+// 			{
+// 				eggs.push_back(new Egg(assets, tempmover));
+// 			}
+// 		}
+// 		else
+// 		{
+// 			//If pigeon is not alive delete it from the memory and the array
+// 			delete p;
+// 			pigeons.remove(p);
+// 		}
+// 	}
+// }
 
 
 void Game::updateFlare(){
@@ -203,6 +203,9 @@ void Game::updatePlanes(){
 			delete i;
 			planes.remove(i);
 			blasts.push_back(new Blast(assets, i->getMover()));
+		}
+		else if (i->getMover().x > 800 || i->getMover().x < 0){
+			planes.remove(i);
 		}
 		
 	}
@@ -285,34 +288,55 @@ void Game::spawnPlanes()
 	}
 }
 
+void Game::timer(){
+	static time_t secs = 0, temp;
+	static int count = 0;
+	secs = difftime( time(0), start);
+	if (temp != secs){
+		// cout << "temp: "<< temp <<endl;
+		// cout << "secs: "<< secs <<endl;
+		count ++;
+		if (count == 2){
+			int rnd = rand() % 3 + 1;
+			if (rnd == 1){
+				spawnBirds();
+			}
+			else if (rnd == 2){
+				spawnPlanes();
+			}
+			else{
+				spawnBirds();
+				spawnPlanes();
+			}
+			count = 0;
+		}
+	}
+	temp = secs; 
+}
+
 void Game::drawAllObjects()
 {
+	timer();
 	Check4Collision();
-	for (Unit *i : birds)
-	{
-		i->childDraw(gRenderer);
-	}
-	for (Unit *i : flares)
-	{
+	for (Unit *i : birds){
 		i->childDraw(gRenderer);
 	}
 
-	for (Blast *i : blasts)
-	{
-		
+	for (Unit *i : flares){
 		i->childDraw(gRenderer);
 	}
 
-	for (Plane *i : planes)
-	{
-		
+	for (Blast *i : blasts){	
+		i->childDraw(gRenderer);
+	}
+
+	for (Plane *i : planes){
 		i->childDraw(gRenderer);
 	}
 }
 
 void Game::run()
 {
-
 	SDL_RenderClear(gRenderer);
 	//Main loop flag
 	bool quit = false;
@@ -363,6 +387,6 @@ void Game::run()
 		updateBlasts();
 		drawAllObjects();			  //draws all objects
 		SDL_RenderPresent(gRenderer); //displays the updated renderer
-		SDL_Delay(200);				  //causes sdl engine to delay for specified miliseconds
+		SDL_Delay(100);				  //causes sdl engine to delay for specified miliseconds
 	}
 }

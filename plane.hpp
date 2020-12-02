@@ -36,7 +36,7 @@ public:
             if (Unit::mover.x > 800)
             {
                 //If Plane leave the screen reset it to its initial position
-                Unit::mover.x = 0;
+                //Unit::mover.x = 0;
             }
             else
             {
@@ -51,7 +51,7 @@ public:
             if (Unit::mover.x < 0)
             {
                 //If plane leave the screen reset it to its initial position
-                Unit::mover.x = 800;
+                //Unit::mover.x = 800;
             }
             else
             {
