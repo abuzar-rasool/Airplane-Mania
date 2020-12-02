@@ -4,9 +4,10 @@ class Bird : public FlyingObject
 private:
     SDL_Rect src[4];
     int birdSpeed = 5;
-    bool scare=false;
+    
 
 public:
+    bool scare=false;
     Bird(SDL_Texture *texture) : FlyingObject(texture){};
     Bird(SDL_Texture *texture, int s) : FlyingObject(texture), birdSpeed(s){};
     void animate()
@@ -76,7 +77,7 @@ public:
 
     void scared()
     {
-        birdSpeed+=10;
+        birdSpeed+=5;
         scare=true;
         flip=!flip;
     }

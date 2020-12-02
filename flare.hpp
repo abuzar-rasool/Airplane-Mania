@@ -4,8 +4,9 @@ class Flare : public FlyingObject
 {
 private:
     SDL_Rect src[10];
-    bool collide = false;
+    
 public:
+    bool collide = false;
     Flare(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
     {
         frame=0;

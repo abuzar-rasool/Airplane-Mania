@@ -96,6 +96,9 @@ public:
         for (int i = 0; i < 4; i++)
             src[i] = s[i];
     }
+    bool stillFlying(){
+        return still_flying;
+    }
 };
 
 

@@ -249,7 +249,7 @@ void Game::Check4Collision(){
 	for (Bird *i : birds){
 		for (Plane *j : planes)
 		{
-			if (abs(i->getMover().x - j->getMover().x) <= j->getMover().w && abs(i->getMover().y - j->getMover().y) <= j->getMover().h)
+			if (abs(i->getMover().x - j->getMover().x) <= j->getMover().w && abs(i->getMover().y - j->getMover().y) <= j->getMover().h && j->stillFlying())
 			{
 				j->crashed();
 				i->crashed();
@@ -264,7 +264,7 @@ void Game::Check4Collision(){
 				i->crashed();
 				k->collisionhappen();
 				cout << "Bird Margai"<<endl;
-			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+50 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+59 && i->stillFlying()){
+			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
 				i->scared();
 				k->collisionhappen();
 			}
