@@ -25,7 +25,7 @@ bool Game::init()
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("HU Life", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("Airplane Mania", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (gWindow == NULL)
 		{
 			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
@@ -56,6 +56,9 @@ bool Game::init()
 
 			startMenu.loadImage(gRenderer,"mainmenu.jpeg");
 			startMenu.customize(gRenderer,0, 0, 600, 800);
+
+			gamePausedMenu.loadImage(gRenderer, "bar2.png");
+			gamePausedMenu.customize(gRenderer,300,350, 250, 220);
 
 			bgSound.LoadMusic("bgsound.mp3");
 			spawnBirdSound.LoadSoundEffect("beat.wav");
@@ -400,7 +403,9 @@ void Game::run()
 			}
 			else if (e.type == SDL_KEYDOWN) {
 				if (e.key.keysym.sym == 112 && isPause == false){
-					writeText("Game Paused", 24, 350, 250, {255,0,0,0});
+					gamePausedMenu.show(gRenderer);
+					writeText("Game Paused", 24, 350, 400, {5, 236, 252});
+					writeText("Press 'P' key to resume", 16, 340, 450, {5, 236, 252});
 					SDL_RenderPresent(gRenderer);
 					isPause = true;
 				}

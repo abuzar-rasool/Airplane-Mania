@@ -34,6 +34,7 @@ class Game{
     int no_of_total_birds = 0;
 
     Menu startMenu;
+    Menu gamePausedMenu;
 
     SoundManager bgSound;
     SoundManager spawnPlaneSound;
