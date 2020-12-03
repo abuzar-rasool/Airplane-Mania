@@ -3,6 +3,7 @@
 #include <iostream>
 #include <time.h>
 #include "text.cpp"
+#include "sound.cpp"
 
 bool Game::init()
 {
@@ -52,6 +53,12 @@ bool Game::init()
 					success = false;
 				}
 			}
+
+			bgSound.LoadMusic("beat.wav");
+			spawnBirdSound.LoadMusic("beat.wav");
+			spawnPlaneSound.LoadMusic("beat.wav");
+			planeCrashSound.LoadMusic("beat.wav");
+			birdDiedSound.LoadMusic("beat.wav");
 		}
 	}
 
@@ -220,11 +227,13 @@ void Game::updatePlanes(){
 			}
 			blasts.push_back(new Blast(assets, i->getMover()));
 			set_score(-30); //Plane Crashed
+			planeCrashSound.playMusic(1);
 			planes.remove(i);
 			delete i;
 		}
 		else if (i->getMover().x > 800){
 			set_score(50); //Safe Passage Successful
+			// sound for successful passage
 			planes.remove(i);
 		}	
 	}
@@ -239,12 +248,15 @@ void Game::spawnBirds(){
 		if (rnd == 1)
 		{
 			birds.push_back(new Bird1(assets));
+			spawnPlaneSound.playMusic(1);
 		}
 		else if(rnd==2)
 		{
 			birds.push_back(new Bird2(assets));
+			spawnPlaneSound.playMusic(1);
 		}else{
 			birds.push_back(new Bird3(assets));
+			spawnPlaneSound.playMusic(1);
 		}
 		}
 	}
@@ -262,6 +274,7 @@ void Game::Check4Collision(){
 			{
 				j->crashed();
 				i->crashed();
+				planeCrashSound.playMusic(1);
 				cout << "Thuk Gaya Jhaaz"<<endl;
 			}
 		}
@@ -272,6 +285,7 @@ void Game::Check4Collision(){
 
 				i->crashed();
 				k->collisionhappen();
+				birdDiedSound.playMusic(1);
 				cout << "Bird Margai"<<endl;
 			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
 				i->scared();
@@ -345,21 +359,12 @@ void Game::writeText(std::string content, int fontSize, int xCo, int yCo, SDL_Co
 	text.display(xCo,yCo, gRenderer);
 }
 
+
 void Game::run()
 {
 	SDL_RenderClear(gRenderer);
 	//Main loop flag
 	bool quit = false;
-	// TTF_Init();
-	// TTF_Font *font = TTF_OpenFont("arial.ttf",50);
-	// std::cout << TTF_GetError() << std::endl;
-	// SDL_Color color = {255,0,0,255};
-	// SDL_Surface *textSurface = TTF_RenderText_Solid(font, "Testing bro",color);
-	// SDL_Texture *text = SDL_CreateTextureFromSurface(gRenderer, textSurface);
-	// SDL_Rect textRect;
-	// textRect.x = textRect.y = 200;
-
-	// SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
 
 	//Event handler
 	SDL_Event e;
@@ -402,9 +407,13 @@ void Game::run()
  			}
 		}
 
+		
 		SDL_RenderClear(gRenderer);						 //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
 		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
+
+		// bgSound.playMusic(2);
+
 		writeText("Score", 30, 700, 10, {255,255,255,0});
 		writeText(to_string(score), 20, 720, 45, {255,255,255,0});
 
