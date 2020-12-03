@@ -17,6 +17,7 @@
 #include "plane.hpp"
 #include "blast.hpp"
 #include "sound.cpp"
+#include "menu.cpp"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ class Game{
     int no_of_birds = 1;
     int no_of_planes = 1;
     int no_of_total_birds = 0;
+
+
 
     SoundManager bgSound;
     SoundManager spawnPlaneSound;

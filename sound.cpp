@@ -8,11 +8,12 @@
 class SoundManager {
     private:
     Mix_Music *bgMusic = NULL;
+    Mix_Chunk * chunk = NULL;
 
     public:
 
     SoundManager(){
-        if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+        if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 ) {
 					printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
 			}
     }
@@ -25,15 +26,33 @@ class SoundManager {
 	    }
     }
 
-    void playMusic(int loops) {
+    void LoadSoundEffect(const std::string &soundFileName) {
+        chunk = Mix_LoadWAV(soundFileName.c_str());
+    }
+
+    void playMusic() {
         if( Mix_PlayingMusic() == 0 )
 			{
-			    Mix_PlayMusic( bgMusic, loops);
+			    Mix_PlayMusic(bgMusic, -1);
 			}
     }
 
+    void pauseMusic() {
+        if (Mix_PlayingMusic()) {
+            Mix_PauseMusic();
+        }
+    }
+
+    void playSoundEffect() {
+        Mix_PlayChannel(-1, chunk, 0);
+    }
+
     ~SoundManager() {
-        delete bgMusic;
+        
+        Mix_FreeChunk(chunk);
+        Mix_FreeMusic(bgMusic);
+        bgMusic = nullptr;
+        chunk = nullptr;
         Mix_Quit();
     }
 };

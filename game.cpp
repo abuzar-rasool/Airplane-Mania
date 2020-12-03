@@ -54,11 +54,12 @@ bool Game::init()
 				}
 			}
 
-			bgSound.LoadMusic("beat.wav");
-			spawnBirdSound.LoadMusic("beat.wav");
-			spawnPlaneSound.LoadMusic("beat.wav");
-			planeCrashSound.LoadMusic("beat.wav");
-			birdDiedSound.LoadMusic("beat.wav");
+
+			bgSound.LoadMusic("bgsound.mp3");
+			spawnBirdSound.LoadSoundEffect("beat.wav");
+			spawnPlaneSound.LoadSoundEffect("beat.wav");
+			planeCrashSound.LoadSoundEffect("beat.wav");
+			birdDiedSound.LoadSoundEffect("beat.wav");
 		}
 	}
 
@@ -227,7 +228,7 @@ void Game::updatePlanes(){
 			}
 			blasts.push_back(new Blast(assets, i->getMover()));
 			set_score(-30); //Plane Crashed
-			planeCrashSound.playMusic(1);
+			planeCrashSound.playSoundEffect();
 			planes.remove(i);
 			delete i;
 		}
@@ -248,15 +249,15 @@ void Game::spawnBirds(){
 		if (rnd == 1)
 		{
 			birds.push_back(new Bird1(assets));
-			spawnPlaneSound.playMusic(1);
+			spawnPlaneSound.playSoundEffect();
 		}
 		else if(rnd==2)
 		{
 			birds.push_back(new Bird2(assets));
-			spawnPlaneSound.playMusic(1);
+			spawnPlaneSound.playSoundEffect();
 		}else{
 			birds.push_back(new Bird3(assets));
-			spawnPlaneSound.playMusic(1);
+			spawnPlaneSound.playSoundEffect();
 		}
 		}
 	}
@@ -274,7 +275,7 @@ void Game::Check4Collision(){
 			{
 				j->crashed();
 				i->crashed();
-				planeCrashSound.playMusic(1);
+				planeCrashSound.playSoundEffect();
 				cout << "Thuk Gaya Jhaaz"<<endl;
 			}
 		}
@@ -285,7 +286,7 @@ void Game::Check4Collision(){
 
 				i->crashed();
 				k->collisionhappen();
-				birdDiedSound.playMusic(1);
+				birdDiedSound.playSoundEffect();
 				cout << "Bird Margai"<<endl;
 			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
 				i->scared();
@@ -392,6 +393,7 @@ void Game::run()
 				{
 					//launch flare in sky
 					SDL_Rect currentPosition = {xMouse, yMouse, 15, 15};
+					planeCrashSound.playSoundEffect();
 					flares.push_back(new Flare(assets, currentPosition));
 				}
 			}
@@ -412,7 +414,7 @@ void Game::run()
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
 		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
 
-		// bgSound.playMusic(2);
+		bgSound.playMusic();
 
 		writeText("Score", 30, 700, 10, {255,255,255,0});
 		writeText(to_string(score), 20, 720, 45, {255,255,255,0});
