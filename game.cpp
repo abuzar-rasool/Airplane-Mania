@@ -54,6 +54,8 @@ bool Game::init()
 				}
 			}
 
+			startMenu.loadImage(gRenderer,"mainmenu.jpeg");
+			startMenu.customize(gRenderer,0, 0, 600, 800);
 
 			bgSound.LoadMusic("bgsound.mp3");
 			spawnBirdSound.LoadSoundEffect("beat.wav");
@@ -366,7 +368,6 @@ void Game::run()
 	SDL_RenderClear(gRenderer);
 	//Main loop flag
 	bool quit = false;
-
 	//Event handler
 	SDL_Event e;
 	int pauseCounter = 0;
@@ -407,6 +408,27 @@ void Game::run()
 					isPause = false;
 				}
  			}
+			
+			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false && gameState == "notRunning")
+			{
+				//this is a good location to add pigeon in linked list.
+				int xMouse, yMouse;
+				SDL_GetMouseState(&xMouse, &yMouse);
+				if (xMouse > 590 && xMouse < 700 && yMouse > 280 && yMouse <320) {
+					gameState = "running";
+				} else if (xMouse > 590 && xMouse < 700 && yMouse > 325 && yMouse < 355) {
+					gameState = "users";
+				}
+				else if (xMouse > 590 && xMouse < 700 && yMouse > 360 && yMouse < 400) {
+					gameState = "options";
+				}
+				else if (xMouse > 590 && xMouse < 700 && yMouse > 410 && yMouse < 440) {
+					gameState = "credits";
+				} 
+				 else if (xMouse > 590 && xMouse < 700 && yMouse > 445 && yMouse < 480) {
+					quit = true;
+				}
+			}
 		}
 
 		
@@ -414,23 +436,28 @@ void Game::run()
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
 		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
 
+		
+
 		bgSound.playMusic();
-
-		writeText("Score", 30, 700, 10, {255,255,255,0});
-		writeText(to_string(score), 20, 720, 45, {255,255,255,0});
-
-		writeText("Timer", 30, 10, 10, {255,255,255,0});
-		writeText(to_string(120 - runtime), 20, 30, 45, {255,255,255,0});
 
 		if (120-runtime == 0){
 			isPause = true;
 		}
-		if (isPause == false) {
+		if (isPause == false && gameState == "running") {
+			writeText("Score", 30, 700, 10, {255,255,255,0});
+			writeText(to_string(score), 20, 720, 45, {255,255,255,0});
+			writeText("Timer", 30, 10, 10, {255,255,255,0});
+			writeText(to_string(120 - runtime), 20, 30, 45, {255,255,255,0});
+
 			updateFlare();
 			updatePlanes();
 			updateBlasts();
 			updateBirds();
 			drawAllObjects();
+			SDL_RenderPresent(gRenderer);
+
+		} else if (gameState == "notRunning" && isPause == false) {
+			startMenu.show(gRenderer);
 			SDL_RenderPresent(gRenderer);
 		}
 			  //draws all objects

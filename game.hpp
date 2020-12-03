@@ -28,12 +28,12 @@ class Game{
     time_t start = time(0), runtime;
     bool isPause = false;
     int score = 0;
-
+    string gameState = "notRunning";
     int no_of_birds = 1;
     int no_of_planes = 1;
     int no_of_total_birds = 0;
 
-
+    Menu startMenu;
 
     SoundManager bgSound;
     SoundManager spawnPlaneSound;
@@ -45,7 +45,6 @@ class Game{
 
     //The window renderer
     SDL_Renderer* gRenderer = NULL;
-
     //Current displayed texture
     SDL_Texture* gTexture = NULL;
     //global reference to png image sheets
