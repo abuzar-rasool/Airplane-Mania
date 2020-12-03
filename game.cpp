@@ -313,36 +313,44 @@ void Game::spawnPlanes()
 }
 
 void Game::timer(){
-	static time_t secs = 0;
-	static int count = 0;
-	secs = difftime( time(0), start);
-	if (runtime != secs){
-		// cout << "temp: "<< temp <<endl;
-		// cout << "secs: "<< secs <<endl;
-		count ++;
-		if (count == 5){
-			int rnd = rand() % 3 + 1;
-			if (rnd == 1){
-				spawnBirds();
-			}
-			else if (rnd == 2){
-				spawnPlanes();
-			}
-			else{
-				spawnBirds();
-				spawnPlanes();
-			}
-			count = 0;
+	if (gameState == "running" && isPause == false){
+		static time_t start = time(0);
+		static time_t secs = 0, temp;
+		static int count = 0;
+
+		if (pauseflag == true){
+			start = time(0)-runtime;
+			pauseflag = false;
 		}
+
+		secs = difftime( time(0), start);
+		if (runtime != secs){
+			// cout << "temp: "<< temp <<endl;
+			// cout << "secs: "<< secs <<endl;
+			count ++;
+			if (count == 5){
+				int rnd = rand() % 3 + 1;
+				if (rnd == 1){
+					spawnBirds();
+				}
+				else if (rnd == 2){
+					spawnPlanes();
+				}
+				else{
+					spawnBirds();
+					spawnPlanes();
+				}
+				count = 0;
+			}
+		}
+		runtime = runtime + (secs-runtime) + temp;
+		temp = 0; 
 	}
-	runtime = secs; 
 }
 
 
 void Game::drawAllObjects()
 {
-	timer();
-	Check4Collision();
 	for (Unit *i : birds){
 		i->childDraw(gRenderer);
 	}
@@ -408,6 +416,7 @@ void Game::run()
 					writeText("Press 'P' key to resume", 16, 340, 450, {5, 236, 252});
 					SDL_RenderPresent(gRenderer);
 					isPause = true;
+					pauseflag = true;
 				}
 				else if (e.key.keysym.sym == 112 && isPause == true) {
 					isPause = false;
@@ -446,7 +455,7 @@ void Game::run()
 		bgSound.playMusic();
 
 		if (120-runtime == 0){
-			isPause = true;
+			//isPause = true;
 		}
 		if (isPause == false && gameState == "running") {
 			writeText("Score", 30, 700, 10, {255,255,255,0});
@@ -459,6 +468,8 @@ void Game::run()
 			updateBlasts();
 			updateBirds();
 			drawAllObjects();
+			
+			Check4Collision();
 			SDL_RenderPresent(gRenderer);
 
 		} else if (gameState == "notRunning" && isPause == false) {
@@ -467,6 +478,7 @@ void Game::run()
 		}
 			  //draws all objects
 		 //displays the updated renderer
+		timer();
 		SDL_Delay(100);				  //causes sdl engine to delay for specified miliseconds
 	}
 }

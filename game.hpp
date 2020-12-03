@@ -25,8 +25,8 @@ class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
-    time_t start = time(0), runtime;
-    bool isPause = false;
+    time_t runtime, pausetime;
+    bool isPause = false, pauseflag = false;
     int score = 0;
     string gameState = "notRunning";
     int no_of_birds = 1;
