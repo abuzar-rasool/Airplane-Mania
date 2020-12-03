@@ -23,8 +23,9 @@ class Game{
     //Screen dimension constants
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
-    time_t start = time(0);
+    time_t start = time(0), runtime;
     bool isPause = false;
+    int score = 0;
 
     int no_of_birds = 1;
     int no_of_planes = 1;
@@ -52,6 +53,7 @@ class Game{
     list<Blast*> blasts;
 
 public:
+    void set_score(int a);
     bool init();
     bool loadMedia();
     void close();

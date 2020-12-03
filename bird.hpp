@@ -118,6 +118,8 @@ public:
         src[2] = {41, 161, 87, 85};
         src[3] = {157, 161, 87, 85};
         Bird::setBirdSource(src);
+        Unit::mover.x = 800;
+        FlyingObject::flip = true;
     };
 };
 
@@ -134,9 +136,11 @@ public:
         src[3] = {155, 481, 90, 42};
 
         Unit::mover.w=60;
-         Unit::mover.h=32;
+        Unit::mover.h=32;
 
         Bird::setBirdSource(src);
+        Unit::mover.x = 800;
+        FlyingObject::flip = true;
     };
 };
 
@@ -151,5 +155,7 @@ public:
         src[2] = {300, 172, 87, 85};
         src[3] = {416, 171, 87, 85};
         Bird::setBirdSource(src);
+        Unit::mover.x = 800;
+        FlyingObject::flip = true;
     };
 };

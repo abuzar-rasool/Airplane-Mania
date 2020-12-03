@@ -13,6 +13,8 @@ public:
         src[3] = {42, 1070, 205, 131};
         Unit::mover.h = 45;
         Unit::mover.w = 70;
+        Unit::mover.x = 0;
+        FlyingObject::flip = false;
         Plane::setPlaneSource(src);
         planespeed=3;
     };
@@ -30,36 +32,39 @@ public:
         }
         Unit::src = src[frame];
 
-        if (!FlyingObject::flip)
-        {
+        // if (!FlyingObject::flip)
+        // {
 
-            if (Unit::mover.x > 800)
-            {
-                //If Plane leave the screen reset it to its initial position
-                //Unit::mover.x = 0;
-            }
-            else
-            {
+        //     if (Unit::mover.x > 800)
+        //     {
+        //         //If Plane leave the screen reset it to its initial position
+        //         //Unit::mover.x = 0;
+        //     }
+        //     else
+        //     {
 
-                //Plane moving from right to left of the screen if flip is false.
-                Unit::mover.x += planespeed;
-            }
+        //         //Plane moving from right to left of the screen if flip is false.
+        //         Unit::mover.x += planespeed;
+        //     }
+        // }
+        // else
+        // {
+
+        //     if (Unit::mover.x < 0)
+        //     {
+        //         //If plane leave the screen reset it to its initial position
+        //         //Unit::mover.x = 800;
+        //     }
+        //     else
+        //     {
+        //         //Plane moving left to right of the screen if the flip is true.
+        //         Unit::mover.x -= planespeed;
+        //     }
+        // }
+
+        if (Unit::mover.x  < 800){
+            Unit::mover.x += planespeed;
         }
-        else
-        {
-
-            if (Unit::mover.x < 0)
-            {
-                //If plane leave the screen reset it to its initial position
-                //Unit::mover.x = 800;
-            }
-            else
-            {
-                //Plane moving left to right of the screen if the flip is true.
-                Unit::mover.x -= planespeed;
-            }
-        }
-
         if (still_flying == false){
             Unit::mover.y += planespeed+5;
         }

@@ -201,11 +201,12 @@ void Game::updateBlasts(){
 void Game::updateBirds(){
 	if (isPause == false) {
 		for(Bird *i: birds){
-		if(!i->isAlive()){
-			delete i;
-			birds.remove(i);
+			if(!i->isAlive()){
+				delete i;
+				birds.remove(i);
+				set_score(-10); //Bird Died
+			}
 		}
-	}
 	}
 }
 
@@ -218,18 +219,18 @@ void Game::updatePlanes(){
 				printf("There was an exception");
 			}
 			blasts.push_back(new Blast(assets, i->getMover()));
+			set_score(-30); //Plane Crashed
 			planes.remove(i);
 			delete i;
 		}
-		else if (i->getMover().x > 800 || i->getMover().x < 0){
+		else if (i->getMover().x > 800){
+			set_score(50); //Safe Passage Successful
 			planes.remove(i);
-		}
-		
+		}	
 	}
 }
 
-void Game::spawnBirds()
-{
+void Game::spawnBirds(){
 	if (isPause == false) {
 		for (int i = 0; i < no_of_birds; i++)
 	{
@@ -247,7 +248,10 @@ void Game::spawnBirds()
 		}
 		}
 	}
-	
+}
+
+void Game::set_score(int s){
+	score = score+s;
 }
 
 void Game::Check4Collision(){
@@ -278,7 +282,6 @@ void Game::Check4Collision(){
 			}
 		}
 	}
-
 }
 
 void Game::spawnPlanes()
@@ -290,14 +293,14 @@ void Game::spawnPlanes()
 }
 
 void Game::timer(){
-	static time_t secs = 0, temp;
+	static time_t secs = 0;
 	static int count = 0;
 	secs = difftime( time(0), start);
-	if (temp != secs){
+	if (runtime != secs){
 		// cout << "temp: "<< temp <<endl;
 		// cout << "secs: "<< secs <<endl;
 		count ++;
-		if (count == 2){
+		if (count == 5){
 			int rnd = rand() % 3 + 1;
 			if (rnd == 1){
 				spawnBirds();
@@ -312,7 +315,7 @@ void Game::timer(){
 			count = 0;
 		}
 	}
-	temp = secs; 
+	runtime = secs; 
 }
 
 
@@ -380,16 +383,7 @@ void Game::run()
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 
-				if (yMouse < 400 && xMouse > 400)
-				{
-					spawnBirds();
-					no_of_total_birds+=1;
-					//Check4Collision();
-				}
-				else if(yMouse < 400){
-					spawnPlanes();
-				}
-				else
+				if (yMouse > 400)
 				{
 					//launch flare in sky
 					SDL_Rect currentPosition = {xMouse, yMouse, 15, 15};
@@ -412,7 +406,14 @@ void Game::run()
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
 		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
 		writeText("Score", 30, 700, 10, {255,255,255,0});
-		writeText("100", 20, 720, 45, {255,255,255,0});
+		writeText(to_string(score), 20, 720, 45, {255,255,255,0});
+
+		writeText("Timer", 30, 10, 10, {255,255,255,0});
+		writeText(to_string(120 - runtime), 20, 30, 45, {255,255,255,0});
+
+		if (120-runtime == 0){
+			isPause = true;
+		}
 		if (isPause == false) {
 			updateFlare();
 			updatePlanes();
