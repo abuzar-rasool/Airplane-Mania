@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <list>
-
+#include "text.cpp"
+#include <SDL_mixer.h>
 #include "pigeon.hpp"
 #include "egg.hpp"
 #include "nest.hpp"
@@ -23,7 +24,7 @@ class Game{
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
     time_t start = time(0);
-
+    bool isPause = false;
 
     int no_of_birds = 1;
     int no_of_planes = 1;
@@ -41,6 +42,7 @@ class Game{
     SDL_Texture* assets=NULL;
 
     //You may use C++ linked lists, or you can create your own.
+
     list<Unit*> pigeons;
     list<Unit*> eggs;
     list<Nest*> nests;   
@@ -66,5 +68,6 @@ public:
     void updatePlanes();
     void timer();
     void updateBirds();
+    void writeText(std::string content, int font, int xCo, int yCo, SDL_Color color);
 };
 

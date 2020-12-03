@@ -2,6 +2,7 @@
 #include "unit.hpp"
 #include <iostream>
 #include <time.h>
+#include "text.cpp"
 
 bool Game::init()
 {
@@ -198,12 +199,13 @@ void Game::updateBlasts(){
 }
 
 void Game::updateBirds(){
-	for(Bird *i: birds){
+	if (isPause == false) {
+		for(Bird *i: birds){
 		if(!i->isAlive()){
 			delete i;
 			birds.remove(i);
 		}
-		
+	}
 	}
 }
 
@@ -228,7 +230,8 @@ void Game::updatePlanes(){
 
 void Game::spawnBirds()
 {
-	for (int i = 0; i < no_of_birds; i++)
+	if (isPause == false) {
+		for (int i = 0; i < no_of_birds; i++)
 	{
 		//Randomly spawn Bird1, Bird2 and Bir
 		int rnd = rand() % 3 + 1;
@@ -242,7 +245,9 @@ void Game::spawnBirds()
 		}else{
 			birds.push_back(new Bird3(assets));
 		}
+		}
 	}
+	
 }
 
 void Game::Check4Collision(){
@@ -310,6 +315,7 @@ void Game::timer(){
 	temp = secs; 
 }
 
+
 void Game::drawAllObjects()
 {
 	timer();
@@ -331,27 +337,44 @@ void Game::drawAllObjects()
 	}
 }
 
+void Game::writeText(std::string content, int fontSize, int xCo, int yCo, SDL_Color color) {
+	Text text(gRenderer, "defaultFont.ttf", fontSize, content, color);
+	text.display(xCo,yCo, gRenderer);
+}
+
 void Game::run()
 {
 	SDL_RenderClear(gRenderer);
 	//Main loop flag
 	bool quit = false;
+	// TTF_Init();
+	// TTF_Font *font = TTF_OpenFont("arial.ttf",50);
+	// std::cout << TTF_GetError() << std::endl;
+	// SDL_Color color = {255,0,0,255};
+	// SDL_Surface *textSurface = TTF_RenderText_Solid(font, "Testing bro",color);
+	// SDL_Texture *text = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+	// SDL_Rect textRect;
+	// textRect.x = textRect.y = 200;
+
+	// SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
 
 	//Event handler
 	SDL_Event e;
+	int pauseCounter = 0;
 	//While application is running
 	while (!quit)
 	{
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
+		
 			//User requests quit
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
 
-			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
+			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false)
 			{
 				//this is a good location to add pigeon in linked list.
 				int xMouse, yMouse;
@@ -373,17 +396,33 @@ void Game::run()
 					flares.push_back(new Flare(assets, currentPosition));
 				}
 			}
+			else if (e.type == SDL_KEYDOWN) {
+				if (e.key.keysym.sym == 112 && isPause == false){
+					writeText("Game Paused", 24, 350, 250, {255,0,0,0});
+					SDL_RenderPresent(gRenderer);
+					isPause = true;
+				}
+				else if (e.key.keysym.sym == 112 && isPause == true) {
+					isPause = false;
+				}
+ 			}
 		}
 
 		SDL_RenderClear(gRenderer);						 //removes everything from renderer
 		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
-
-		updateFlare();
-		updatePlanes();
-		updateBlasts();
-		updateBirds();
-		drawAllObjects();			  //draws all objects
-		SDL_RenderPresent(gRenderer); //displays the updated renderer
+		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
+		writeText("Score", 30, 700, 10, {255,255,255,0});
+		writeText("100", 20, 720, 45, {255,255,255,0});
+		if (isPause == false) {
+			updateFlare();
+			updatePlanes();
+			updateBlasts();
+			updateBirds();
+			drawAllObjects();
+			SDL_RenderPresent(gRenderer);
+		}
+			  //draws all objects
+		 //displays the updated renderer
 		SDL_Delay(100);				  //causes sdl engine to delay for specified miliseconds
 	}
 }
