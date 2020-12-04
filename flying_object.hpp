@@ -13,11 +13,16 @@ protected:
     }
 
 public:
+    // constructor for flyingobject class that takes texture, width, and height
     FlyingObject(SDL_Texture *texture, int width = 40, int height = 40) : Unit(texture)
-    {
+    {   
+        // getting random bool value
         flip = randomBool();
+        // getting random position between 0 and 400
         int rend_pos_y = rand() % 400;
         SDL_Rect spawn_position;
+
+        // checking for flip condition
         if (flip)
         {
             spawn_position = {800, rend_pos_y, width, height};
@@ -28,6 +33,8 @@ public:
         }
         Unit::mover = spawn_position;
     };
+
+    // overloaded constructor
     FlyingObject(SDL_Texture *texture,SDL_Rect spawn_position,int angle=0,int width = 40, int height = 40) : Unit(texture,spawn_position,angle)
     {
         flip = false;

@@ -3,12 +3,15 @@
 class Blast : public FlyingObject
 {
 private:
+    // SDL_Rect array of 10 elements
     SDL_Rect src[10];
 
 public:
+    // constructor with texture and rect
     Blast(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
     {
         frame=0;
+        // setting Rect with sprites
         SDL_Rect t_src[10] = {{881, 48, 38, 44},
                {859, 233, 77, 77},
                {844, 420, 104, 103},
@@ -25,8 +28,11 @@ public:
         
     }
 
+    // used for animate blasts
     void animate();
+    // used for rendering sprites on screen
     void childDraw(SDL_Renderer *render);
+    // checks if blast is going on
     bool isAlive();
 
 };

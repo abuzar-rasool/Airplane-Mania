@@ -49,8 +49,6 @@ class Game{
     SoundManager Cheer;
     SoundManager Score;
 
-
-
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
 

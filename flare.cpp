@@ -1,5 +1,6 @@
 #include "flare.hpp"
 
+// animate flare sprite position
 void Flare::animate(){
     //move up to the blast point
     if(collide==false){
@@ -14,16 +15,19 @@ void Flare::animate(){
     }
 }
 
+// checks for collision
 void Flare::collisionhappen(){
     collide=true;
 }
 
+// renders the flare sprites
 void Flare::childDraw(SDL_Renderer *render){
     animate();
     Unit::src = src[frame];     
     Unit::rotation(render);
 };
 
+// checks if flare is going on
 bool Flare::isAlive(){
     if(frame==9){
         return false;

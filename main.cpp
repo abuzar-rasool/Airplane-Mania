@@ -1,8 +1,8 @@
 #include "game.hpp"
-//First change by jawwad
-//Second change by Hussain
 
+// main function
 int main(int argc, char *argv[]){
+    // creating game object
     Game game;
     srand(time(NULL));
     if( !game.init() ){
@@ -15,7 +15,9 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
+    // running game
     game.run();
+    // closing game
     game.close();
 
     return 0;

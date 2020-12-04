@@ -14,7 +14,6 @@ public:
     Unit(SDL_Texture *texture, SDL_Rect initpos) : assets(texture), mover(initpos){};
     Unit(SDL_Texture *texture, SDL_Rect initpos,int a) : assets(texture), mover(initpos),angle(a){};
 
-
     //regular draw of objects the flip can be used to flip the image 
     void draw(SDL_Renderer *render, bool flip = false);
 

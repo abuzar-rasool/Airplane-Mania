@@ -54,6 +54,7 @@ bool Game::init()
 				}
 			}
 
+			// loading media into various objects of different classes and customizing them
 			startMenu.loadImage(gRenderer,"mainmenu.jpeg");
 			startMenu.customize(gRenderer,0, 0, 600, 800);
 
@@ -114,6 +115,7 @@ void Game::close()
 	SDL_Quit();
 }
 
+// default func that's used for loading images
 SDL_Texture *Game::loadTexture(std::string path)
 {
 	//The final texture
@@ -140,9 +142,12 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 
+// updating the flare creating an animation
 void Game::updateFlare(){
 	for(Flare *i: flares){
+		// checking if the flare is still on screen
 		if(!i->isAlive()){
+			// deleting the pointer
 			delete i;
 			flares.remove(i);
 		}
@@ -150,9 +155,12 @@ void Game::updateFlare(){
 	}
 }
 
+// this func update blasts
 void Game::updateBlasts(){
 	for(Blast *i: blasts){
+		// checking if blast is going on
 		if(!i->isAlive()){
+			// deleting pointer
 			delete i;
 			blasts.remove(i);
 		}
@@ -160,17 +168,24 @@ void Game::updateBlasts(){
 	}
 }
 
+// this func update the bird movement based on different conditions
 void Game::updateBirds(){
 	if (isPause == false) {
 		for(Bird *i: birds){
+			// checking if bird is alive
 			if(!i->isAlive()){
+				// checking if a bird is scared or not
 				if(i->get_scared() == true){	
 					Score.playSoundEffect();
+					// set score
 					set_score(5);
 				}
 				else{
+					// set score if the bird dieds
 					set_score(-10); //Bird Died
 				}
+
+				// deleting pointer
 				delete i;
 				birds.remove(i);
 			}
@@ -178,8 +193,10 @@ void Game::updateBirds(){
 	}
 }
 
+// this updates the planes based on different conditions
 void Game::updatePlanes(){
 	for(Plane *i: planes){
+		// if plane is alive means no collisions
 		if(!i->isAlive()){
 			try{
 
@@ -192,6 +209,7 @@ void Game::updatePlanes(){
 			planes.remove(i);
 			delete i;
 		}
+		// this is true when a plane passes successfully without collision
 		else if (i->getMover().x > 800){
 			set_score(50);
 			//Safe Passage Successful
@@ -201,6 +219,7 @@ void Game::updatePlanes(){
 	}
 }
 
+// this func spawns birds in the game loop
 void Game::spawnBirds(){
 	if (isPause == false) {
 		for (int i = 0; i < no_of_birds; i++)
@@ -224,6 +243,7 @@ void Game::spawnBirds(){
 	}
 }
 
+// this func handles the score count
 void Game::set_score(int s){
 	score = score+s;
 	if(s > 0){
@@ -232,20 +252,25 @@ void Game::set_score(int s){
 	
 }
 
+// this func handles the entire collision logic
 void Game::Check4Collision(){
 	for (Bird *i : birds){
 		for (Plane *j : planes)
-		{
+		{	
+			// this condition is true when bird collides with a plane
 			if (abs(i->getMover().x - j->getMover().x) <= j->getMover().w && abs(i->getMover().y - j->getMover().y) <= j->getMover().h && j->stillFlying())
-			{
+			{	
+				// calling crashed func which calls crashing animation
 				j->crashed();
 				i->crashed();
+				// sound effect for collision
 				BirdPlaneCollision.playSoundEffect();
 				//cout << "Thuk Gaya Jhaaz"<<endl;
 			}
 		}
 		for (Flare *k : flares)
-		{
+		{	
+			// this condition is true when flare hits a bird
 			if (abs(i->getMover().x - k->getMover().x) <= i->getMover().w && abs(i->getMover().y - k->getMover().y) <= i->getMover().h && i->stillFlying())
 			{
 
@@ -254,7 +279,9 @@ void Game::Check4Collision(){
 				birdDied1.playSoundEffect();
 				//cout << "Bird Margai"<<endl;
 
-			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
+			}
+			// this condition is true when bird gets scared by the nearby flare
+			else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
 				i->scared();
 				k->collisionhappen();
 			}
@@ -265,6 +292,7 @@ void Game::Check4Collision(){
 	}
 }
 
+// func used for spawning planes
 void Game::spawnPlanes()
 {
 	for (int i = 0; i < no_of_planes; i++)
@@ -274,22 +302,24 @@ void Game::spawnPlanes()
 	}
 }
 
+// this func contains the timer logic
 void Game::timer(){
 	if (gameState == "running" && isPause == false){
 		static time_t start = time(0);
 		static time_t secs = 0, temp;
 		static int count = 0;
-
+		
+		// checking if game is paused
 		if (pauseflag == true){
 			start = time(0)-runtime;
 			pauseflag = false;
 		}
 
+		// checking the absolute diff b/w start and current time
 		secs = difftime( time(0), start);
 		if (runtime != secs){
-			// cout << "temp: "<< temp <<endl;
-			// cout << "secs: "<< secs <<endl;
 			count ++;
+			// start spawning after 5 seconds
 			if (count == 5){
 				int rnd = rand() % 3 + 1;
 				if (rnd == 1){
@@ -311,6 +341,7 @@ void Game::timer(){
 }
 
 
+// drawing all the objects by calling relevant class functions
 void Game::drawAllObjects()
 {
 	for (Bird *i : birds){
@@ -330,21 +361,27 @@ void Game::drawAllObjects()
 	}
 }
 
+// func that write texts and links with Text class
 void Game::writeText(std::string content, int fontSize, int xCo, int yCo, SDL_Color color) {
 	Text text(gRenderer, "defaultFont.ttf", fontSize, content, color);
 	text.display(xCo,yCo, gRenderer);
 }
 
+// this func is removing all game objects
 void Game::remove_all(){
+	// removing birds
 	for(auto&& i : birds) {
 		delete i;
 	}
+	// removing flares
 	for(auto&& i : flares) {
 		delete i;
 	}
+	// removing blasts
 	for(auto&& i : blasts) {
 		delete i;
 	}
+	// removing planes
 	for(auto&& i : planes) {
 		delete i;
 	}
@@ -376,12 +413,14 @@ void Game::run()
 				quit = true;
 			}
 
+			// this condition is for shooting flares when a user clicks on the bottom half of the canvas
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false && gameState == "running")
 			{
 				//this is a good location to add pigeon in linked list.
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 
+				// activates when user clicks below 400 y axis
 				if (yMouse > 400)
 				{
 					//launch flare in sky
@@ -391,25 +430,33 @@ void Game::run()
 					FlareSound.playSoundEffect();
 				}
 			}
+
+			// this condition is true when user pressed the key P and the game stopped
 			else if (e.type == SDL_KEYDOWN && gameState == "running") {
 				if (e.key.keysym.sym == SDLK_p && isPause == false){
+					// showing menu and text 
 					gamePausedMenu.show(gRenderer);
 					writeText("Game Paused", 24, 340, 375, {5, 236, 252});
 					writeText("Press 'P' key to Resume", 16, 330, 425, {5, 236, 252});
 					writeText("Press 'H' key for Home", 16, 330, 450, {5, 236, 252});
 					writeText("Press 'Q' key to Quit", 16, 330, 475, {5, 236, 252});
+					// playing sound effects
 					spawnPlaneSound.playSoundEffect();
 					SDL_RenderPresent(gRenderer);
+					// changing the bool values to true
 					isPause = true;
 					pauseflag = true;
 				}
+				// if a user press "P" key again, the game resumes
 				else if (e.key.keysym.sym == SDLK_p && isPause == true) {
 					spawnPlaneSound.playSoundEffect();
 					isPause = false;
 				}
+				// if the user press the Q key, game quits
 				else if (e.key.keysym.sym == SDLK_q && isPause == true) {
 					quit = true;
 				}
+				// if a user presses H, game will return to home menu
 				else if (e.key.keysym.sym == SDLK_h && isPause == true){
 					gameState = "notRunning";
 					isPause = false;
@@ -420,23 +467,17 @@ void Game::run()
 				}
  			}
 			
+			// this condition is true when we are on Main menu and if a user clicks on screen. 
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false && gameState == "notRunning")
 			{
-				//this is a good location to add pigeon in linked list.
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
+				// this checks if user clicked on start game button
 				if (xMouse > 590 && xMouse < 700 && yMouse > 280 && yMouse <320) {
 					gameState = "running";
-				} else if (xMouse > 590 && xMouse < 700 && yMouse > 325 && yMouse < 355) {
-					gameState = "users";
 				}
-				else if (xMouse > 590 && xMouse < 700 && yMouse > 360 && yMouse < 400) {
-					gameState = "options";
-				}
-				else if (xMouse > 590 && xMouse < 700 && yMouse > 410 && yMouse < 440) {
-					gameState = "credits";
-				} 
-				 else if (xMouse > 590 && xMouse < 700 && yMouse > 445 && yMouse < 480) {
+				// this checks if user clicked on quit game button
+				else if (xMouse > 590 && xMouse < 700 && yMouse > 445 && yMouse < 480) {
 					quit = true;
 				}
 			}
@@ -448,9 +489,10 @@ void Game::run()
 		// SDL_RenderCopy(gRenderer, text, NULL, &textRect);
 
 		
-
+		// playing background music
 		bgSound.playMusic();
 
+		// this condition is true when the timer for the game stops and a menu popups with highscores and other details
 		if (120-runtime == 0){
 			gamePausedMenu.show(gRenderer);
 			writeText("Game End", 24, 340, 375, {5, 240, 252});
@@ -464,29 +506,41 @@ void Game::run()
 			pauseflag = true;
 			runtime = NULL;
 			score = 0;
+
+			// deleting all objects
 			remove_all();
 		}
+
+		// this condition is true when the game is in running state
 		if (isPause == false && gameState == "running") {
+			// this is the score board on the top right corner
 			writeText("Score", 30, 700, 10, {255,255,255,0});
 			writeText(to_string(score), 20, 720, 45, {255,255,255,0});
+			// this is the timer on the top right corner
 			writeText("Timer", 30, 10, 10, {255,255,255,0});
 			writeText(to_string(120 - runtime), 20, 30, 45, {255,255,255,0});
 
+			// animating all the objects including flares, planes, birds and etc.
 			updateFlare();
 			updatePlanes();
 			updateBlasts();
 			updateBirds();
 			drawAllObjects();
 			
+			// checking for collisions
 			Check4Collision();
+			// rendering the changes
 			SDL_RenderPresent(gRenderer);
 
+		// this condition is true when a user paused the game
 		} else if (gameState == "notRunning" && isPause == false) {
 			startMenu.show(gRenderer);
 			SDL_RenderPresent(gRenderer);
 		}
 			  //draws all objects
 		 //displays the updated renderer
+		
+		// this is the timer running
 		timer();
 		SDL_Delay(100);				  //causes sdl engine to delay for specified miliseconds
 	}

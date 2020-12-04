@@ -1,5 +1,6 @@
 #include "unit.hpp"
 
+// draw us used for render images
 void Unit::draw(SDL_Renderer *render, bool flip)
 {
     if (flip)
@@ -12,6 +13,7 @@ void Unit::draw(SDL_Renderer *render, bool flip)
     }
 };
 
+// this creates a wobble effect and then render it
 void Unit::wobbledraw(SDL_Renderer *render)
 {
 
@@ -27,6 +29,8 @@ void Unit::wobbledraw(SDL_Renderer *render)
     }
 };
 
+
+// this is used for tilting the image and then rendering it
 void Unit::incline(SDL_Renderer *render, int a,bool flip)
 {
     if (flip)
@@ -41,11 +45,13 @@ void Unit::incline(SDL_Renderer *render, int a,bool flip)
 }
 
 
+//  get MOver returns the SDL_Rect
 SDL_Rect Unit::getMover()
 {
     return mover;
 };
 
+// this func rotates the sprite and then render it
 void Unit::rotation(SDL_Renderer *render){
      
      if (angle == 180)

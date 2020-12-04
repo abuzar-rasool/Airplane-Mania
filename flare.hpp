@@ -7,9 +7,11 @@ protected:
 public:
 
     bool collide = false;
+    // constructor with texture and rect parameters
     Flare(SDL_Texture *texture,SDL_Rect c_pos) : FlyingObject(texture,c_pos,180)
     {
         frame=0;
+        // filling array with sprites positions
         SDL_Rect t_src[10] = {{881, 48, 38, 44},
                {859, 233, 77, 77},
                {844, 420, 104, 103},
@@ -25,9 +27,13 @@ public:
         }
     }
 
+    // used to animate flare
     void animate();
+    // used to check for collision
     void collisionhappen();
+    // used for rendering flare
     void childDraw(SDL_Renderer *render);
+    // checks if flare is going on
     bool isAlive();
 
 };
