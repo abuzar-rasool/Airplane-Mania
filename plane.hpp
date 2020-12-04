@@ -72,7 +72,7 @@ public:
     
     void crashed(){
         still_flying = false;
-        std::cout<<"The plane should change";
+        //std::cout<<"The plane should change";
         src[0] = {46, 686, 201, 128};
         src[1] = {46, 686, 201, 128};
         src[2] = {46, 686, 201, 128};

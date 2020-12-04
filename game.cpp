@@ -61,10 +61,16 @@ bool Game::init()
 			gamePausedMenu.customize(gRenderer,300,350, 250, 220);
 
 			bgSound.LoadMusic("background.wav");
-			spawnBirdSound.LoadSoundEffect("Plane_Spawn.wav");
-			spawnPlaneSound.LoadSoundEffect("Bird_Spawn1.wav");
+			spawnPlaneSound.LoadSoundEffect("Plane_Spawn.wav");
+			spawnBird1.LoadSoundEffect("Bird_Spawn1.wav");
+			spawnBird2.LoadSoundEffect("Bird_Spawn2.wav");
 			planeCrashSound.LoadSoundEffect("Plane_Blast.wav");
-			birdDiedSound.LoadSoundEffect("BIrd_Scream2.wav");
+			birdDied1.LoadSoundEffect("BIrd_Scream3.wav");
+			BirdPlaneCollision.LoadSoundEffect("Plane_BIrd_Coliision.wav");
+			FlareSound.LoadSoundEffect("Flare.wav");
+			Cheer.LoadSoundEffect("Cheer.wav");
+			Score.LoadSoundEffect("Score.wav");
+
 		}
 	}
 
@@ -132,65 +138,6 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 
-// void Game::updateEggs()
-// {
-// 	//check the collision of eggs and nests here
-// 	//If an egg is dropped in a nest, produce a new baby pigeon
-// 	//if the egg is dropped on floor, remove it from list.
-
-// 	//The implemenation is done by iterating over eggs and nests in a
-// 	// nested fashion if, if the absoulte position if egg an the nest <=20
-// 	//then hatch the egg
-// 	for (Unit *i : eggs)
-// 	{
-// 		Egg *e = (Egg *)i;
-// 		if (e->dropped())
-// 		{
-// 			delete i;
-// 			eggs.remove(i);
-// 		}
-// 		else
-// 		{
-// 			for (Unit *j : nests)
-// 			{
-// 				Nest *n = (Nest *)i;
-// 				if (abs(i->getMover().x - j->getMover().x) <= 20 && abs(i->getMover().y - j->getMover().y) <= 20)
-// 				{
-// 					SDL_Rect currentPosition = {i->getMover().x + 12, i->getMover().y + 12, 12, 16};
-// 					pigeons.push_back(new Pigeon(assets, currentPosition, true));
-// 					delete i;
-// 					eggs.remove(i);
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
-// void Game::updatePigeons()
-// {
-// 	//Iterate over the link list of pigeons and generated eggs with 2% probability
-// 	//Remove such pigeons from the list which have laid 4 eggs.
-// 	for (Unit *i : pigeons)
-// 	{
-// 		Pigeon *p = (Pigeon *)i;
-// 		if (p->isAlive())
-// 		{
-// 			//If pigeon is alive then call layegg that will layEgg at 2% probablity.
-// 			SDL_Rect tempmover = {p->getMover().x, p->getMover().y, 12, 16};
-// 			if (p->layEgg())
-// 			{
-// 				eggs.push_back(new Egg(assets, tempmover));
-// 			}
-// 		}
-// 		else
-// 		{
-// 			//If pigeon is not alive delete it from the memory and the array
-// 			delete p;
-// 			pigeons.remove(p);
-// 		}
-// 	}
-// }
-
 void Game::updateFlare(){
 	for(Flare *i: flares){
 		if(!i->isAlive()){
@@ -215,9 +162,15 @@ void Game::updateBirds(){
 	if (isPause == false) {
 		for(Bird *i: birds){
 			if(!i->isAlive()){
+				if(i->get_scared() == true){	
+					Score.playSoundEffect();
+					set_score(5);
+				}
+				else{
+					set_score(-10); //Bird Died
+				}
 				delete i;
 				birds.remove(i);
-				set_score(-10); //Bird Died
 			}
 		}
 	}
@@ -238,7 +191,8 @@ void Game::updatePlanes(){
 			delete i;
 		}
 		else if (i->getMover().x > 800){
-			set_score(50); //Safe Passage Successful
+			set_score(50);
+			//Safe Passage Successful
 			// sound for successful passage
 			planes.remove(i);
 		}	
@@ -254,15 +208,15 @@ void Game::spawnBirds(){
 		if (rnd == 1)
 		{
 			birds.push_back(new Bird1(assets));
-			spawnPlaneSound.playSoundEffect();
+			spawnBird1.playSoundEffect();
 		}
 		else if(rnd==2)
 		{
 			birds.push_back(new Bird2(assets));
-			spawnPlaneSound.playSoundEffect();
+			spawnBird2.playSoundEffect();
 		}else{
 			birds.push_back(new Bird3(assets));
-			spawnPlaneSound.playSoundEffect();
+			spawnBird1.playSoundEffect();
 		}
 		}
 	}
@@ -270,6 +224,10 @@ void Game::spawnBirds(){
 
 void Game::set_score(int s){
 	score = score+s;
+	if(s > 0){
+		Score.playSoundEffect();
+	}
+	
 }
 
 void Game::Check4Collision(){
@@ -280,8 +238,8 @@ void Game::Check4Collision(){
 			{
 				j->crashed();
 				i->crashed();
-				planeCrashSound.playSoundEffect();
-				cout << "Thuk Gaya Jhaaz"<<endl;
+				BirdPlaneCollision.playSoundEffect();
+				//cout << "Thuk Gaya Jhaaz"<<endl;
 			}
 		}
 		for (Flare *k : flares)
@@ -291,8 +249,9 @@ void Game::Check4Collision(){
 
 				i->crashed();
 				k->collisionhappen();
-				birdDiedSound.playSoundEffect();
-				cout << "Bird Margai"<<endl;
+				birdDied1.playSoundEffect();
+				//cout << "Bird Margai"<<endl;
+
 			}else if(abs(i->getMover().x - k->getMover().x) <= i->getMover().w+100 && abs(i->getMover().y - k->getMover().y) <= i->getMover().h+100 && i->stillFlying() && k->collide && !i->scare){
 				i->scared();
 				k->collisionhappen();
@@ -309,7 +268,7 @@ void Game::spawnPlanes()
 	for (int i = 0; i < no_of_planes; i++)
 	{
 		planes.push_back(new Plane(assets));
-		spawnBirdSound.playSoundEffect();
+		spawnPlaneSound.playSoundEffect();
 	}
 }
 
@@ -427,6 +386,7 @@ void Game::run()
 					SDL_Rect currentPosition = {xMouse, yMouse, 15, 15};
 					planeCrashSound.playSoundEffect();
 					flares.push_back(new Flare(assets, currentPosition));
+					FlareSound.playSoundEffect();
 				}
 			}
 			else if (e.type == SDL_KEYDOWN && gameState == "running") {
@@ -436,12 +396,13 @@ void Game::run()
 					writeText("Press 'P' key to Resume", 16, 330, 425, {5, 236, 252});
 					writeText("Press 'H' key for Home", 16, 330, 450, {5, 236, 252});
 					writeText("Press 'Q' key to Quit", 16, 330, 475, {5, 236, 252});
-					spawnBirdSound.playSoundEffect();
+					spawnPlaneSound.playSoundEffect();
 					SDL_RenderPresent(gRenderer);
 					isPause = true;
 					pauseflag = true;
 				}
 				else if (e.key.keysym.sym == SDLK_p && isPause == true) {
+					spawnPlaneSound.playSoundEffect();
 					isPause = false;
 				}
 				else if (e.key.keysym.sym == SDLK_q && isPause == true) {
@@ -495,7 +456,7 @@ void Game::run()
 			writeText("Press 'P' key to Resume", 16, 330, 450, {5, 236, 252});
 			writeText("Press 'H' key for Home", 16, 330, 475, {5, 236, 252});
 			writeText("Press 'Q' key to Quit", 16, 330, 500, {5, 236, 252});
-			spawnBirdSound.playSoundEffect();
+			Cheer.playSoundEffect();
 			SDL_RenderPresent(gRenderer);
 			isPause = true;
 			pauseflag = true;

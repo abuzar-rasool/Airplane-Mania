@@ -37,10 +37,20 @@ class Game{
     Menu gamePausedMenu;
 
     SoundManager bgSound;
+    SoundManager spawnBird1;
+    SoundManager spawnBird2;
     SoundManager spawnPlaneSound;
-    SoundManager spawnBirdSound;
     SoundManager planeCrashSound;
-    SoundManager birdDiedSound;
+    SoundManager birdDied1;
+    SoundManager birdDied2;
+    SoundManager birdDied3;
+    SoundManager BirdPlaneCollision;
+    SoundManager FlareSound;
+    SoundManager Cheer;
+    SoundManager Score;
+
+
+
     //The window we'll be rendering to
     SDL_Window* gWindow = NULL;
 

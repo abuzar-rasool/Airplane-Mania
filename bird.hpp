@@ -75,6 +75,10 @@ public:
         src[3]=src[3]; 
     }
 
+    bool get_scared(){
+        return scare;
+    }
+
     void scared()
     {
         birdSpeed+=5;
