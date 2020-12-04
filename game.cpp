@@ -2,8 +2,8 @@
 #include "unit.hpp"
 #include <iostream>
 #include <time.h>
-#include "text.cpp"
-#include "sound.cpp"
+#include "text.hpp"
+#include "sound.hpp"
 
 bool Game::init()
 {

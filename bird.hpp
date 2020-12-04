@@ -4,115 +4,24 @@ class Bird : public FlyingObject
 private:
     SDL_Rect src[4];
     int birdSpeed = 5;
-    
 
 public:
     bool scare=false;
     Bird(SDL_Texture *texture) : FlyingObject(texture){};
     Bird(SDL_Texture *texture, int s) : FlyingObject(texture), birdSpeed(s){};
-    void animate()
-    {
-        
-        //Bird flying animation
-        if (FlyingObject::frame == 3)
-        {
-            FlyingObject::frame = 0;
-        }
-        else
-        {
-            frame++;
-        }
-        Unit::src = src[frame];
-        if(!scare){
-        if (!FlyingObject::flip)
-        {
-
-            if (Unit::mover.x > 750 && !flip)
-            {
-                //If bird leave the screen reset it to its initial position
-                flip=true;
-            }
-            else
-            {
-
-                //Bird moving from right to left of the screen if flip is false.
-                Unit::mover.x += birdSpeed;
-            }
-        }
-        else
-        {
-
-            if (Unit::mover.x < 10)
-            {
-                //If bird leave the screen reset it to its initial position
-                flip=false;
-            }
-            else
-            {
-                //Bird moving left to right of the screen if the flip is true.
-                Unit::mover.x -= birdSpeed;
-            }
-        }
-
-        }else{
-            if(!flip){
-                Unit::mover.x += birdSpeed;
-            }else{
-                Unit::mover.x -= birdSpeed;
-            }
-        }
-
-        if(!still_flying){
-            Unit::mover.y += 30;
-        }
-    }
-
-    void crashed(){
-        still_flying=false;
-        src[0]=src[3];
-        src[1]=src[3];
-        src[2]=src[3];
-        src[3]=src[3]; 
-    }
-
-    bool get_scared(){
-        return scare;
-    }
-
-    void scared()
-    {
-        birdSpeed+=5;
-        scare=true;
-        flip=!flip;
-    }
-
-    void childDraw(SDL_Renderer *render)
-    {
-         
-        animate();
-
-        Unit::draw(render, FlyingObject::flip);
-    };
-    bool isAlive()
-    {
-        if(Unit::mover.y>580 or (Unit::mover.x<-10 || Unit::mover.x>810)){
-         return false;   
-        } 
-        return true;
-    };
-    void setBirdSource(SDL_Rect s[4])
-    {
-        for (int i = 0; i < 4; i++)
-            src[i] = s[i];
-    }
-    bool stillFlying(){
-        return still_flying;
-    }
+    
+    void animate();
+    void crashed();
+    bool get_scared();
+    void scared();
+    void childDraw(SDL_Renderer *render);
+    bool isAlive();
+    void setBirdSource(SDL_Rect s[4]);
+    bool stillFlying();
 
 };
 
-class Bird1 : public Bird
-{
+class Bird1 : public Bird{
 public:
     Bird1(SDL_Texture *texture) : Bird(texture, 3)
     {
@@ -127,9 +36,7 @@ public:
     };
 };
 
-class Bird2 : public Bird
-{
-
+class Bird2 : public Bird{
 public:
     Bird2(SDL_Texture *texture) : Bird(texture, 4)
     {
@@ -141,18 +48,16 @@ public:
 
         Unit::mover.w=60;
         Unit::mover.h=32;
+        Unit::mover.x = 800;
 
         Bird::setBirdSource(src);
-        Unit::mover.x = 800;
         FlyingObject::flip = true;
     };
 };
 
-class Bird3 : public Bird
-{
+class Bird3 : public Bird{
 public:
-    Bird3(SDL_Texture *texture) : Bird(texture, 5)
-    {
+    Bird3(SDL_Texture *texture) : Bird(texture, 5){
         SDL_Rect src[4] ;
         src[0] = {300, 133, 87, 85};
         src[1] = {416, 45, 87, 85};

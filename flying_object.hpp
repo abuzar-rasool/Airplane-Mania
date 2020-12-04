@@ -32,6 +32,7 @@ public:
     {
         flip = false;
     };
+    
     virtual void animate() = 0;
     virtual void childDraw(SDL_Renderer *render) = 0;
     virtual bool isAlive() = 0;

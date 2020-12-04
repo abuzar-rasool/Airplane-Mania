@@ -21,30 +21,12 @@ public:
                {688, 827, 118, 125}};
         for(int i=0;i<10;i++){
             src[i]=t_src[i];
-        };
+        }
         
-    };
-    void animate()
-    {
-        Unit::mover.w+=5;
-        Unit::mover.h+=5;
-        if(frame<9)
-            frame++;
-    
     }
-    void childDraw(SDL_Renderer *render)
-    {
-        animate();
-        Unit::src = src[frame];     
-        Unit::rotation(render);
-    };
-    bool isAlive()
-    {
-       if(frame==9){
-           return false;
-       }else{
-           return true;
-       }
-    };
+
+    void animate();
+    void childDraw(SDL_Renderer *render);
+    bool isAlive();
 
 };

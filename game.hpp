@@ -7,14 +7,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <list>
-#include "text.cpp"
+#include "text.hpp"
 #include <SDL_mixer.h>
 #include "bird.hpp"
 #include "flare.hpp"
 #include "plane.hpp"
 #include "blast.hpp"
-#include "sound.cpp"
-#include "menu.cpp"
+#include "sound.hpp"
+#include "menu.hpp"
 
 using namespace std;
 
