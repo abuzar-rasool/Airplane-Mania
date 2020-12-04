@@ -33,5 +33,6 @@ public:
     //is called.
     virtual void childDraw(SDL_Renderer *render) = 0;
 
+    //gets SDL_Mover to help in movements
     SDL_Rect getMover();
 };
