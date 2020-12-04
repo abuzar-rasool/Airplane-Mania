@@ -32,35 +32,6 @@ public:
         }
         Unit::src = src[frame];
 
-        // if (!FlyingObject::flip)
-        // {
-
-        //     if (Unit::mover.x > 800)
-        //     {
-        //         //If Plane leave the screen reset it to its initial position
-        //         //Unit::mover.x = 0;
-        //     }
-        //     else
-        //     {
-
-        //         //Plane moving from right to left of the screen if flip is false.
-        //         Unit::mover.x += planespeed;
-        //     }
-        // }
-        // else
-        // {
-
-        //     if (Unit::mover.x < 0)
-        //     {
-        //         //If plane leave the screen reset it to its initial position
-        //         //Unit::mover.x = 800;
-        //     }
-        //     else
-        //     {
-        //         //Plane moving left to right of the screen if the flip is true.
-        //         Unit::mover.x -= planespeed;
-        //     }
-        // }
 
         if (Unit::mover.x  < 800){
             Unit::mover.x += planespeed;
@@ -105,17 +76,3 @@ public:
         return still_flying;
     }
 };
-
-
-// class Plane_crashed : public Plane
-// {
-
-// public:
-//     Plane_crashed(SDL_Texture *texture) : Plane(texture, 4)
-//     {
-//         SDL_Rect src[1];
-//         src[0] = {41, 157, 87, 85};
-//         Plane::setPlaneSource(src);
-//     };
-// };
-
