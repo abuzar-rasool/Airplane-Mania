@@ -52,10 +52,7 @@ class Game{
     SDL_Texture* assets=NULL;
 
     //You may use C++ linked lists, or you can create your own.
-
-    list<Unit*> pigeons;
-    list<Unit*> eggs;
-    list<Nest*> nests;   
+   
     list<Bird*> birds;
     list<Plane*> planes;
     list<Flare*> flares;  
@@ -78,6 +75,7 @@ public:
     void updateBlasts();
     void updatePlanes();
     void timer();
+    void remove_all();
     void updateBirds();
     void writeText(std::string content, int font, int xCo, int yCo, SDL_Color color);
 };

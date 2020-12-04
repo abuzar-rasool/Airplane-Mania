@@ -60,11 +60,11 @@ bool Game::init()
 			gamePausedMenu.loadImage(gRenderer, "bar2.png");
 			gamePausedMenu.customize(gRenderer,300,350, 250, 220);
 
-			bgSound.LoadMusic("bgsound.mp3");
-			spawnBirdSound.LoadSoundEffect("beat.wav");
-			spawnPlaneSound.LoadSoundEffect("beat.wav");
-			planeCrashSound.LoadSoundEffect("beat.wav");
-			birdDiedSound.LoadSoundEffect("beat.wav");
+			bgSound.LoadMusic("background.wav");
+			spawnBirdSound.LoadSoundEffect("Plane_Spawn.wav");
+			spawnPlaneSound.LoadSoundEffect("Bird_Spawn1.wav");
+			planeCrashSound.LoadSoundEffect("Plane_Blast.wav");
+			birdDiedSound.LoadSoundEffect("BIrd_Scream2.wav");
 		}
 	}
 
@@ -309,6 +309,7 @@ void Game::spawnPlanes()
 	for (int i = 0; i < no_of_planes; i++)
 	{
 		planes.push_back(new Plane(assets));
+		spawnBirdSound.playSoundEffect();
 	}
 }
 
@@ -351,11 +352,11 @@ void Game::timer(){
 
 void Game::drawAllObjects()
 {
-	for (Unit *i : birds){
+	for (Bird *i : birds){
 		i->childDraw(gRenderer);
 	}
 
-	for (Unit *i : flares){
+	for (Flare *i : flares){
 		i->childDraw(gRenderer);
 	}
 
@@ -373,6 +374,25 @@ void Game::writeText(std::string content, int fontSize, int xCo, int yCo, SDL_Co
 	text.display(xCo,yCo, gRenderer);
 }
 
+void Game::remove_all(){
+	for(auto&& i : birds) {
+		delete i;
+	}
+	for(auto&& i : flares) {
+		delete i;
+	}
+	for(auto&& i : blasts) {
+		delete i;
+	}
+	for(auto&& i : planes) {
+		delete i;
+	}
+
+	birds.clear();
+	flares.clear();
+	blasts.clear();
+	planes.clear();
+}
 
 void Game::run()
 {
@@ -395,7 +415,7 @@ void Game::run()
 				quit = true;
 			}
 
-			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false)
+			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT && isPause == false && gameState == "running")
 			{
 				//this is a good location to add pigeon in linked list.
 				int xMouse, yMouse;
@@ -409,17 +429,31 @@ void Game::run()
 					flares.push_back(new Flare(assets, currentPosition));
 				}
 			}
-			else if (e.type == SDL_KEYDOWN) {
-				if (e.key.keysym.sym == 112 && isPause == false){
+			else if (e.type == SDL_KEYDOWN && gameState == "running") {
+				if (e.key.keysym.sym == SDLK_p && isPause == false){
 					gamePausedMenu.show(gRenderer);
-					writeText("Game Paused", 24, 350, 400, {5, 236, 252});
-					writeText("Press 'P' key to resume", 16, 340, 450, {5, 236, 252});
+					writeText("Game Paused", 24, 340, 375, {5, 236, 252});
+					writeText("Press 'P' key to Resume", 16, 330, 425, {5, 236, 252});
+					writeText("Press 'H' key for Home", 16, 330, 450, {5, 236, 252});
+					writeText("Press 'Q' key to Quit", 16, 330, 475, {5, 236, 252});
+					spawnBirdSound.playSoundEffect();
 					SDL_RenderPresent(gRenderer);
 					isPause = true;
 					pauseflag = true;
 				}
-				else if (e.key.keysym.sym == 112 && isPause == true) {
+				else if (e.key.keysym.sym == SDLK_p && isPause == true) {
 					isPause = false;
+				}
+				else if (e.key.keysym.sym == SDLK_q && isPause == true) {
+					quit = true;
+				}
+				else if (e.key.keysym.sym == SDLK_h && isPause == true){
+					gameState = "notRunning";
+					isPause = false;
+					pauseflag = true;
+					runtime = NULL;
+					score = 0;
+					remove_all();
 				}
  			}
 			
@@ -455,7 +489,19 @@ void Game::run()
 		bgSound.playMusic();
 
 		if (120-runtime == 0){
-			//isPause = true;
+			gamePausedMenu.show(gRenderer);
+			writeText("Game End", 24, 340, 375, {5, 240, 252});
+			writeText("Youe Total Score is: " + to_string(score), 16, 330, 410, {5, 236, 252});
+			writeText("Press 'P' key to Resume", 16, 330, 450, {5, 236, 252});
+			writeText("Press 'H' key for Home", 16, 330, 475, {5, 236, 252});
+			writeText("Press 'Q' key to Quit", 16, 330, 500, {5, 236, 252});
+			spawnBirdSound.playSoundEffect();
+			SDL_RenderPresent(gRenderer);
+			isPause = true;
+			pauseflag = true;
+			runtime = NULL;
+			score = 0;
+			remove_all();
 		}
 		if (isPause == false && gameState == "running") {
 			writeText("Score", 30, 700, 10, {255,255,255,0});
