@@ -91,11 +91,13 @@ bool Game::loadMedia()
 		success = false;
 	}
 
+
 	return success;
 }
 
 void Game::close()
 {
+	remove_all();
 	//Free loaded images
 	SDL_DestroyTexture(assets);
 	assets = NULL;
