@@ -245,7 +245,7 @@ void Game::spawnBirds(){
 
 // this func handles the score count
 void Game::set_score(int s){
-	score = score+s;
+	playerScore+s;
 	if(s > 0){
 		Score.playSoundEffect();
 	}
@@ -462,7 +462,7 @@ void Game::run()
 					isPause = false;
 					pauseflag = true;
 					runtime = NULL;
-					score = 0;
+					playerScore.resetScore();
 					remove_all();
 				}
  			}
@@ -496,7 +496,7 @@ void Game::run()
 		if (120-runtime == 0){
 			gamePausedMenu.show(gRenderer);
 			writeText("Game End", 24, 340, 375, {5, 240, 252});
-			writeText("Youe Total Score is: " + to_string(score), 16, 330, 410, {5, 236, 252});
+			writeText("Youe Total Score is: " + to_string(playerScore.getScore()), 16, 330, 410, {5, 236, 252});
 			writeText("Press 'P' key to Resume", 16, 330, 450, {5, 236, 252});
 			writeText("Press 'H' key for Home", 16, 330, 475, {5, 236, 252});
 			writeText("Press 'Q' key to Quit", 16, 330, 500, {5, 236, 252});
@@ -505,7 +505,7 @@ void Game::run()
 			isPause = true;
 			pauseflag = true;
 			runtime = NULL;
-			score = 0;
+			playerScore.resetScore();
 
 			// deleting all objects
 			remove_all();
@@ -515,7 +515,7 @@ void Game::run()
 		if (isPause == false && gameState == "running") {
 			// this is the score board on the top right corner
 			writeText("Score", 30, 700, 10, {255,255,255,0});
-			writeText(to_string(score), 20, 720, 45, {255,255,255,0});
+			writeText(to_string(playerScore.getScore()), 20, 720, 45, {255,255,255,0});
 			// this is the timer on the top right corner
 			writeText("Timer", 30, 10, 10, {255,255,255,0});
 			writeText(to_string(120 - runtime), 20, 30, 45, {255,255,255,0});

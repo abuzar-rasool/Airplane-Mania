@@ -15,6 +15,7 @@
 #include "blast.hpp"
 #include "sound.hpp"
 #include "menu.hpp"
+#include "score.hpp"
 
 using namespace std;
 
@@ -24,12 +25,14 @@ class Game{
     const int SCREEN_HEIGHT = 600;
     time_t runtime, pausetime;
     bool isPause = false, pauseflag = false;
-    int score = 0;
     string gameState = "notRunning";
     //score variables
     int no_of_birds = 1;
     int no_of_planes = 1;
     int no_of_total_birds = 0;
+
+    // Score Object
+    Score playerScore;
 
     //Menu options
     Menu startMenu;

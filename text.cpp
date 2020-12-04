@@ -1,3 +1,4 @@
+#pragma once
 #include "text.hpp"
 
 // displays the text on screen
